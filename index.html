@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النظام المحاسبي</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Tahoma,sans-serif;background:#f4f4f4;padding:15px}
+        .container{max-width:800px;margin:0 auto}
+        h1{text-align:center;color:#1a237e;margin:20px 0}
+        .menu{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+        .menu button{flex:1;min-width:100px;padding:12px;border:none;border-radius:8px;background:#3f51b5;color:white;cursor:pointer}
+        .menu button:hover{background:#1a237e}
+        .section{display:none;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+        .section.active{display:block}
+        input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{padding:10px;border:1px solid #ddd;text-align:center}
+        th{background:#3f51b5;color:white}
+        form button{width:100%;padding:14px;background:#4caf50;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+        .entry-card{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0;border-right:4px solid #2196f3}
+        .debit{color:#c62828}.credit{color:#2e7d32}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 النظام المحاسبي</h1>
+        <div class="menu">
+            <button onclick="showSection( chart )">شجرة الحسابات</button>
+            <button onclick="showSection( journal )">قيود اليومية</button>
+            <button onclick="showSection( ledger )">الأستاذ العام</button>
+            <button onclick="showSection( trial )">ميزان المراجعة</button>
+        </div>
+
+        <div id="journal" class="section active">
+            <h2>📝 تسجيل قيد محاسبي</h2>
+            <form id="journalForm">
+                <input type="date" id="entryDate" required>
+                <input type="text" id="description" placeholder="البيان" required>
+                <table>
+                    <tr><th>الحساب</th><th>مدين</th><th>دائن</th></tr>
+                    <tr>
+                        <td><select id="debitAccount"><option value="1001">الصندوق</option><option value="1002">البنك</option><option value="3001">المبيعات</option><option value="4001">إيجار</option></select></td>
+                        <td><input type="number" id="debitAmount" min="0"></td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td><select id="creditAccount"><option value="1001">الصندوق</option><option value="1002">البنك</option><option value="3001">المبيعات</option><option value="4001">إيجار</option></select></td>
+                        <td>0</td>
+                        <td><input type="number" id="creditAmount" min="0"></td>
+                    </tr>
+                </table>
+                <button type="submit">تسجيل القيد</button>
+            </form>
+            <div id="entries"></div>
+        </div>
+
+        <div id="chart" class="section">
+            <h2>🌳 شجرة الحسابات</h2>
+            <div id="chartContent"></div>
+        </div>
+        <div id="ledger" class="section">
+            <h2>📒 الأستاذ العام</h2>
+            <div id="ledgerContent"></div>
+        </div>
+        <div id="trial" class="section">
+            <h2>⚖️ ميزان المراجعة</h2>
+            <div id="trialContent"></div>
+        </div>
+    </div>
+    <script>
+        function showSection(id){document.querySelectorAll( .section ).forEach(s=>s.classList.remove( active ));document.getElementById(id).classList.add( active );if(id=== chart )updateChart();if(id=== ledger )updateLedger();if(id=== trial )updateTrial();}
+        const accounts=[{code: 1001 ,name: الصندوق ,type: أصول },{code: 1002 ,name: البنك ,type: أصول },{code: 2001 ,name: الموردين ,type: خصوم },{code: 3001 ,name: المبيعات ,type: إيرادات },{code: 4001 ,name: الإيجار ,type: مصروفات }];
+        let entries=JSON.parse(localStorage.getItem( entries )|| [] );
+        function displayEntries(){
+            document.getElementById( entries ).innerHTML= <h3 style="margin-top:20px">القيود المسجلة</h3> ;
+            entries.forEach(e=>{
+                let da=accounts.find(a=>a.code===e.debitAccount),ca=accounts.find(a=>a.code===e.creditAccount);
+                document.getElementById( entries ).innerHTML+=`<div class="entry-card"><b>${e.number}</b> - ${e.date}<p>${e.description}</p><p>من حـ / ${da.name} <span class="debit">${e.debitAmount}</span></p><p>إلى حـ / ${ca.name} <span class="credit">${e.creditAmount}</span></p></div>`;
+            });
+        }
+        document.getElementById( journalForm ).addEventListener( submit ,function(e){
+            e.preventDefault();
+            let da=document.getElementById( debitAccount ).value,dam=parseFloat(document.getElementById( debitAmount ).value),ca=document.getElementById( creditAccount ).value,cam=parseFloat(document.getElementById( creditAmount ).value),desc=document.getElementById( description ).value,date=document.getElementById( entryDate ).value;
+            if(!dam||!cam)return alert( الرجاء إدخال المبالغ );
+            if(da===ca)return alert( لا يمكن تشابه الحسابين );
+            entries.unshift({id:Date.now(),number: قيد- +(entries.length+1),date,description:desc,debitAccount:da,creditAccount:ca,debitAmount:dam,creditAmount:cam});
+            localStorage.setItem( entries ,JSON.stringify(entries));
+            displayEntries();
+            this.reset();
+        });
+        function updateChart(){
+            let html= <table><tr><th>الكود</th><th>الاسم</th><th>النوع</th></tr> ;
+            accounts.forEach(a=>html+=`<tr><td>${a.code}</td><td>${a.name}</td><td>${a.type}</td></tr>`);
+            document.getElementById( chartContent ).innerHTML=html+ </table> ;
+        }
+        function updateLedger(){
+            let html=  ;
+            accounts.forEach(acc=>{
+                html+=`<h4>${acc.code} - ${acc.name}</h4><table><tr><th>التاريخ</th><th>البيان</th><th>مدين</th><th>دائن</th></tr>`;
+                let has=false;
+                entries.forEach(en=>{if(en.debitAccount===acc.code){html+=`<tr><td>${en.date}</td><td>${en.description}</td><td class="debit">${en.debitAmount}</td><td>0</td></tr>`;has=true;}if(en.creditAccount===acc.code){html+=`<tr><td>${en.date}</td><td>${en.description}</td><td>0</td><td class="credit">${en.creditAmount}</td></tr>`;has=true;}});
+                if(!has)html+= <tr><td colspan="4">لا توجد حركات</td></tr> ;
+                html+= </table><br> ;
+            });
+            document.getElementById( ledgerContent ).innerHTML=html;
+        }
+        function updateTrial(){
+            let bal={};accounts.forEach(a=>bal[a.code]={name:a.name,debit:0,credit:0});
+            entries.forEach(e=>{if(bal[e.debitAccount])bal[e.debitAccount].debit+=e.debitAmount;if(bal[e.creditAccount])bal[e.creditAccount].credit+=e.creditAmount;});
+            let html= <table><tr><th>الحساب</th><th>مدين</th><th>دائن</th></tr> ,td=0,tc=0;
+            for(let code in bal){html+=`<tr><td>${bal[code].name}</td><td class="debit">${bal[code].debit}</td><td class="credit">${bal[code].credit}</td></tr>`;td+=bal[code].debit;tc+=bal[code].credit;}
+            html+=`<tr style="font-weight:bold;background:#f5f5f5"><td>المجموع</td><td>${td}</td><td>${tc}</td></tr></table>`;
+            document.getElementById( trialContent ).innerHTML=html;
+        }
+        displayEntries();
+    </script>
+</body>
+</html>
