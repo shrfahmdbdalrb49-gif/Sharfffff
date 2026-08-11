@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النظام المحاسبي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 النظام المحاسبي</h1>
+        
+        <div class="menu">
+            <button onclick="showSection( chart )">شجرة الحسابات</button>
+            <button onclick="showSection( journal )">قيود اليومية</button>
+            <button onclick="showSection( ledger )">الأستاذ العام</button>
+            <button onclick="showSection( trial )">ميزان المراجعة</button>
+        </div>
+
+        <!-- نموذج قيد اليومية -->
+        <div id="journal" class="section active">
+            <h2>📝 تسجيل قيد محاسبي</h2>
+            <form id="journalForm">
+                <input type="date" id="entryDate" required>
+                <input type="text" id="description" placeholder="البيان" required>
+                
+                <table>
+                    <tr>
+                        <th>الحساب</th>
+                        <th>مدين</th>
+                        <th>دائن</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="debitAccount">
+                                <option value="1001">الصندوق</option>
+                                <option value="1002">البنك</option>
+                                <option value="3001">المبيعات</option>
+                                <option value="4001">إيجار</option>
+                            </select>
+                        </td>
+                        <td><input type="number" id="debitAmount" min="0"></td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="creditAccount">
+                                <option value="1001">الصندوق</option>
+                                <option value="1002">البنك</option>
+                                <option value="3001">المبيعات</option>
+                                <option value="4001">إيجار</option>
+                            </select>
+                        </td>
+                        <td>0</td>
+                        <td><input type="number" id="creditAmount" min="0"></td>
+                    </tr>
+                </table>
+                
+                <button type="submit">تسجيل القيد</button>
+            </form>
+            
+            <div id="entries"></div>
+        </div>
+
+        <!-- باقي الأقسام -->
+        <div id="chart" class="section">
+            <h2>🌳 شجرة الحسابات</h2>
+            <div id="chartContent"></div>
+        </div>
+        
+        <div id="ledger" class="section">
+            <h2>📒 الأستاذ العام</h2>
+            <div id="ledgerContent"></div>
+        </div>
+        
+        <div id="trial" class="section">
+            <h2>⚖️ ميزان المراجعة</h2>
+            <div id="trialContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
