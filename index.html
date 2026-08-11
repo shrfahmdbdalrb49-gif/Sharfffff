@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النظام المحاسبي مع الأرصدة</title>
+    <title>النظام المحاسبي</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:Tahoma,sans-serif;background:#f4f4f4;padding:15px}
@@ -11,7 +11,6 @@
         h1{text-align:center;color:#1a237e;margin:20px 0}
         .menu{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
         .menu button{flex:1;min-width:100px;padding:12px;border:none;border-radius:8px;background:#3f51b5;color:white;cursor:pointer}
-        .menu button:hover{background:#1a237e}
         .section{display:none;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
         .section.active{display:block}
         input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
@@ -21,22 +20,21 @@
         form button{width:100%;padding:14px;background:#4caf50;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer}
         .entry-card{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0;border-right:4px solid #2196f3}
         .debit{color:#c62828}.credit{color:#2e7d32}
-        .balance-positive{color:#1b5e20}.balance-negative{color:#b71c1c}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📊 النظام المحاسبي</h1>
         <div class="menu">
-            <button onclick="showSection( chart )">شجرة الحسابات</button>
             <button onclick="showSection( journal )">قيود اليومية</button>
+            <button onclick="showSection( chart )">شجرة الحسابات</button>
             <button onclick="showSection( ledger )">الأستاذ العام</button>
             <button onclick="showSection( trial )">ميزان المراجعة</button>
         </div>
 
         <div id="journal" class="section active">
             <h2>📝 تسجيل قيد محاسبي</h2>
-            <form id="journalForm">
+            <form onsubmit="addEntry(event)">
                 <input type="date" id="entryDate" required>
                 <input type="text" id="description" placeholder="البيان" required>
                 <table>
@@ -70,125 +68,128 @@
             <div id="trialContent"></div>
         </div>
     </div>
+
     <script>
-        // الحسابات مع الرصيد الافتتاحي (Opening Balance)
+        // قاعدة بيانات مؤقتة في الذاكرة
         const accounts = [
-            {code: 1001 ,name: الصندوق ,type: أصول ,openingDebit:5000,openingCredit:0},
-            {code: 1002 ,name: البنك ,type: أصول ,openingDebit:20000,openingCredit:0},
-            {code: 2001 ,name: الموردين ,type: خصوم ,openingDebit:0,openingCredit:3000},
-            {code: 3001 ,name: المبيعات ,type: إيرادات ,openingDebit:0,openingCredit:0},
-            {code: 4001 ,name: الإيجار ,type: مصروفات ,openingDebit:0,openingCredit:0},
-            {code: 4002 ,name: رواتب ,type: مصروفات ,openingDebit:0,openingCredit:0}
+            {code: 1001 ,name: الصندوق ,type: أصول },
+            {code: 1002 ,name: البنك ,type: أصول },
+            {code: 2001 ,name: الموردين ,type: خصوم },
+            {code: 3001 ,name: المبيعات ,type: إيرادات },
+            {code: 4001 ,name: الإيجار ,type: مصروفات },
+            {code: 4002 ,name: رواتب ,type: مصروفات }
         ];
 
-        let entries = JSON.parse(localStorage.getItem( entries )|| [] );
+        let entries = JSON.parse(localStorage.getItem( entries ) ||  [] );
 
-        // ملء قوائم الحسابات
-        function populateAccountSelects(){
-            const selects = document.querySelectorAll( #debitAccount, #creditAccount );
-            selects.forEach(select=>{
-                select.innerHTML =   ;
-                accounts.forEach(acc=>{
-                    select.innerHTML += `<option value="${acc.code}">${acc.code} - ${acc.name}</option>`;
-                });
-            });
+        // ملء القوائم المنسدلة
+        function fillSelects() {
+            const html = accounts.map(a => `<option value="${a.code}">${a.code} - ${a.name}</option>`).join(  );
+            document.getElementById( debitAccount ).innerHTML = html;
+            document.getElementById( creditAccount ).innerHTML = html;
         }
 
-        // حساب الرصيد الحالي لحساب معين
-        function getCurrentBalance(accountCode){
-            const acc = accounts.find(a=>a.code===accountCode);
-            let totalDebit = acc.openingDebit;
-            let totalCredit = acc.openingCredit;
-            entries.forEach(e=>{
-                if(e.debitAccount===accountCode) totalDebit += e.debitAmount;
-                if(e.creditAccount===accountCode) totalCredit += e.creditAmount;
-            });
-            return {debit:totalDebit, credit:totalCredit, net:totalDebit-totalCredit};
+        // تبديل الأقسام
+        function showSection(id) {
+            document.querySelectorAll( .section ).forEach(s => s.classList.remove( active ));
+            document.getElementById(id).classList.add( active );
+            if (id ===  chart ) showChart();
+            if (id ===  ledger ) showLedger();
+            if (id ===  trial ) showTrial();
         }
 
-        // عرض القيود
-        function displayEntries(){
-            const container = document.getElementById( entries );
-            container.innerHTML =  <h3 style="margin-top:20px">القيود المسجلة</h3> ;
-            if(entries.length===0){
-                container.innerHTML +=  <p>لا توجد قيود بعد.</p> ; return;
+        // إضافة قيد جديد
+        function addEntry(e) {
+            e.preventDefault();
+            const date = document.getElementById( entryDate ).value;
+            const desc = document.getElementById( description ).value;
+            const debitAcc = document.getElementById( debitAccount ).value;
+            const creditAcc = document.getElementById( creditAccount ).value;
+            const debitAmt = parseFloat(document.getElementById( debitAmount ).value) || 0;
+            const creditAmt = parseFloat(document.getElementById( creditAmount ).value) || 0;
+
+            if (!debitAmt || !creditAmt) return alert( أدخل المبالغ من فضلك );
+            if (debitAcc === creditAcc) return alert( لا يمكن أن يكون الحساب المدين هو نفسه الدائن );
+
+            const entry = {
+                id: Date.now(),
+                number:  قيد-  + (entries.length + 1),
+                date,
+                description: desc,
+                debitAccount: debitAcc,
+                debitAmount: debitAmt,
+                creditAccount: creditAcc,
+                creditAmount: creditAmt
+            };
+
+            entries.unshift(entry);
+            localStorage.setItem( entries , JSON.stringify(entries));
+            document.getElementById( journalForm ).reset();
+            showEntries();
+        }
+
+        // عرض كل القيود
+        function showEntries() {
+            const div = document.getElementById( entries );
+            if (entries.length === 0) {
+                div.innerHTML =  <p>لا توجد قيود بعد.</p> ;
+                return;
             }
-            entries.forEach(e=>{
-                const da = accounts.find(a=>a.code===e.debitAccount);
-                const ca = accounts.find(a=>a.code===e.creditAccount);
-                container.innerHTML += `
-                <div class="entry-card">
-                    <b>${e.number}</b> - ${e.date}
-                    <p>${e.description}</p>
-                    <p>من حـ / ${da.name} <span class="debit">${e.debitAmount.toFixed(2)}</span></p>
-                    <p>إلى حـ / ${ca.name} <span class="credit">${e.creditAmount.toFixed(2)}</span></p>
+            let html =  <h3>القيود المسجلة</h3> ;
+            entries.forEach(en => {
+                const da = accounts.find(a => a.code === en.debitAccount);
+                const ca = accounts.find(a => a.code === en.creditAccount);
+                html += `<div class="entry-card">
+                    <b>${en.number}</b> - ${en.date}<br>
+                    ${en.description}<br>
+                    من ${da.name} (مدين) <span class="debit">${en.debitAmount.toFixed(2)}</span><br>
+                    إلى ${ca.name} (دائن) <span class="credit">${en.creditAmount.toFixed(2)}</span>
                 </div>`;
             });
+            div.innerHTML = html;
         }
 
-        // معالجة نموذج القيد
-        document.getElementById( journalForm ).addEventListener( submit ,function(e){
-            e.preventDefault();
-            const da = document.getElementById( debitAccount ).value;
-            const dam = parseFloat(document.getElementById( debitAmount ).value);
-            const ca = document.getElementById( creditAccount ).value;
-            const cam = parseFloat(document.getElementById( creditAmount ).value);
-            const desc = document.getElementById( description ).value;
-            const date = document.getElementById( entryDate ).value;
-            if(!dam||!cam) return alert( الرجاء إدخال المبالغ );
-            if(da===ca) return alert( لا يمكن تشابه الحسابين );
-            entries.unshift({
-                id:Date.now(),
-                number: قيد- +(entries.length+1),
-                date,description:desc,
-                debitAccount:da,debitAmount:dam,
-                creditAccount:ca,creditAmount:cam
+        // حساب الرصيد
+        function getBalance(code) {
+            let debitSum = 0, creditSum = 0;
+            entries.forEach(e => {
+                if (e.debitAccount === code) debitSum += e.debitAmount;
+                if (e.creditAccount === code) creditSum += e.creditAmount;
             });
-            localStorage.setItem( entries ,JSON.stringify(entries));
-            displayEntries();
-            this.reset();
-        });
+            return { debit: debitSum, credit: creditSum, net: debitSum - creditSum };
+        }
 
-        // عرض شجرة الحسابات مع الأرصدة
-        function updateChart(){
+        // شجرة الحسابات
+        function showChart() {
             let html =  <table><tr><th>الكود</th><th>الاسم</th><th>النوع</th><th>الرصيد</th></tr> ;
-            accounts.forEach(acc=>{
-                const bal = getCurrentBalance(acc.code);
-                let balanceText =   ;
-                if(bal.net>0) balanceText = `<span class="balance-positive">${bal.net.toFixed(2)} (مدين)</span>`;
-                else if(bal.net<0) balanceText = `<span class="balance-negative">${Math.abs(bal.net).toFixed(2)} (دائن)</span>`;
-                else balanceText =  0.00 ;
-                html += `<tr><td>${acc.code}</td><td>${acc.name}</td><td>${acc.type}</td><td>${balanceText}</td></tr>`;
+            accounts.forEach(acc => {
+                const bal = getBalance(acc.code);
+                const net = bal.net.toFixed(2);
+                const cls = bal.net >= 0 ?  debit  :  credit ;
+                html += `<tr><td>${acc.code}</td><td>${acc.name}</td><td>${acc.type}</td><td class="${cls}">${net}</td></tr>`;
             });
-            document.getElementById( chartContent ).innerHTML = html+ </table> ;
+            document.getElementById( chartContent ).innerHTML = html +  </table> ;
         }
 
-        // عرض الأستاذ العام مع ترحيل الأرصدة
-        function updateLedger(){
+        // الأستاذ العام
+        function showLedger() {
             let html =   ;
-            accounts.forEach(acc=>{
-                html += `<h4>${acc.code} - ${acc.name}</h4>
-                <table>
+            accounts.forEach(acc => {
+                html += `<h4>${acc.code} - ${acc.name}</h4><table>
                     <tr><th>التاريخ</th><th>البيان</th><th>مدين</th><th>دائن</th><th>الرصيد</th></tr>`;
-                // رصيد افتتاحي
-                const opening = acc.openingDebit - acc.openingCredit;
-                let runningBalance = opening;
-                html += `<tr style="background:#f9f9f9"><td colspan="2">رصيد افتتاحي</td>
-                    <td>${acc.openingDebit.toFixed(2)}</td><td>${acc.openingCredit.toFixed(2)}</td>
-                    <td>${runningBalance.toFixed(2)}</td></tr>`;
-                
-                const relatedEntries = entries.filter(en=>en.debitAccount===acc.code||en.creditAccount===acc.code);
-                if(relatedEntries.length===0){
+                let balance = 0;
+                const accEntries = entries.filter(e => e.debitAccount === acc.code || e.creditAccount === acc.code);
+                if (accEntries.length === 0) {
                     html +=  <tr><td colspan="5">لا توجد حركات</td></tr> ;
                 } else {
-                    relatedEntries.forEach(en=>{
-                        if(en.debitAccount===acc.code) runningBalance += en.debitAmount;
-                        if(en.creditAccount===acc.code) runningBalance -= en.creditAmount;
+                    accEntries.forEach(e => {
+                        if (e.debitAccount === acc.code) balance += e.debitAmount;
+                        if (e.creditAccount === acc.code) balance -= e.creditAmount;
                         html += `<tr>
-                            <td>${en.date}</td><td>${en.description}</td>
-                            <td class="debit">${en.debitAccount===acc.code?en.debitAmount.toFixed(2): 0.00 }</td>
-                            <td class="credit">${en.creditAccount===acc.code?en.creditAmount.toFixed(2): 0.00 }</td>
-                            <td>${runningBalance.toFixed(2)}</td>
+                            <td>${e.date}</td><td>${e.description}</td>
+                            <td class="debit">${e.debitAccount === acc.code ? e.debitAmount.toFixed(2) :  0.00 }</td>
+                            <td class="credit">${e.creditAccount === acc.code ? e.creditAmount.toFixed(2) :  0.00 }</td>
+                            <td>${balance.toFixed(2)}</td>
                         </tr>`;
                     });
                 }
@@ -197,12 +198,12 @@
             document.getElementById( ledgerContent ).innerHTML = html;
         }
 
-        // عرض ميزان المراجعة بالأرصدة
-        function updateTrial(){
+        // ميزان المراجعة
+        function showTrial() {
             let html =  <table><tr><th>الحساب</th><th>مدين</th><th>دائن</th><th>الرصيد</th></tr> ;
-            let totalDebit=0, totalCredit=0;
-            accounts.forEach(acc=>{
-                const bal = getCurrentBalance(acc.code);
+            let totalDebit = 0, totalCredit = 0;
+            accounts.forEach(acc => {
+                const bal = getBalance(acc.code);
                 totalDebit += bal.debit;
                 totalCredit += bal.credit;
                 html += `<tr>
@@ -212,25 +213,13 @@
                     <td>${bal.net.toFixed(2)}</td>
                 </tr>`;
             });
-            html += `<tr style="font-weight:bold;background:#f5f5f5">
-                <td>المجموع</td>
-                <td>${totalDebit.toFixed(2)}</td>
-                <td>${totalCredit.toFixed(2)}</td>
-                <td></td></tr></table>`;
+            html += `<tr style="font-weight:bold"><td>المجموع</td><td>${totalDebit.toFixed(2)}</td><td>${totalCredit.toFixed(2)}</td><td></td></tr></table>`;
             document.getElementById( trialContent ).innerHTML = html;
         }
 
-        function showSection(id){
-            document.querySelectorAll( .section ).forEach(s=>s.classList.remove( active ));
-            document.getElementById(id).classList.add( active );
-            if(id=== chart )updateChart();
-            if(id=== ledger )updateLedger();
-            if(id=== trial )updateTrial();
-        }
-
-        // تهيئة
-        populateAccountSelects();
-        displayEntries();
+        // تشغيل أولي
+        fillSelects();
+        showEntries();
     </script>
 </body>
 </html>
