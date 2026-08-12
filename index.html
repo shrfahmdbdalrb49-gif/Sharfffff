@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>شرف ERP</title>
+    <title>شرف ERP - نظام إدارة الصيدليات</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -19,18 +20,31 @@
             color: #222;
         }
 
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
         .app {
             display: flex;
             min-height: 100vh;
         }
 
-        /* القائمة الجانبية */
+        /* =========================
+           القائمة الجانبية
+        ========================== */
 
         .sidebar {
             width: 240px;
             background: #172554;
             color: white;
             padding: 20px 10px;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -39,6 +53,14 @@
             font-weight: bold;
             padding: 15px;
             margin-bottom: 20px;
+        }
+
+        .logo small {
+            display: block;
+            font-size: 11px;
+            color: #cbd5e1;
+            margin-top: 6px;
+            font-weight: normal;
         }
 
         .menu-item {
@@ -50,7 +72,7 @@
             padding: 14px 15px;
             margin-bottom: 6px;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             display: block;
         }
@@ -63,11 +85,14 @@
             background: #2563eb;
         }
 
-        /* المحتوى */
+        /* =========================
+           المحتوى
+        ========================== */
 
         .main {
             flex: 1;
-            padding: 25px;
+            min-width: 0;
+            padding: 20px;
         }
 
         .topbar {
@@ -83,7 +108,9 @@
             font-size: 24px;
         }
 
-        /* الشاشات */
+        /* =========================
+           الشاشات
+        ========================== */
 
         .page-section {
             display: none;
@@ -101,16 +128,9 @@
             margin-top: 0;
         }
 
-        .under-construction {
-            padding: 30px;
-            text-align: center;
-            background: #f8fafc;
-            border-radius: 10px;
-            color: #64748b;
-            font-size: 18px;
-        }
-
-        /* البطاقات */
+        /* =========================
+           لوحة التحكم
+        ========================== */
 
         .cards {
             display: grid;
@@ -128,9 +148,286 @@
 
         .card h3 {
             margin-top: 0;
+            font-size: 15px;
         }
 
-        /* الجوال */
+        .card strong {
+            display: block;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           عناوين الصفحات
+        ========================== */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h2 {
+            margin: 0 0 5px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* =========================
+           أزرار
+        ========================== */
+
+        .primary-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .success-btn {
+            border: none;
+            background: #16a34a;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .cancel-btn {
+            border: none;
+            background: #e5e7eb;
+            color: #374151;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .danger-btn {
+            border: none;
+            background: #dc2626;
+            color: white;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            border: none;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        /* =========================
+           نموذج الصنف
+        ========================== */
+
+        .product-form-box {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .product-form-box.show {
+            display: block;
+        }
+
+        .product-form-box h3 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        /* =========================
+           جدول الأصناف
+        ========================== */
+
+        .table-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-input {
+            width: 350px;
+            max-width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 11px 9px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: right;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status-good {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-low {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-out {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-row {
+            text-align: center !important;
+            padding: 35px !important;
+            color: #94a3b8;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* =========================
+           شريط الرسائل
+        ========================== */
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .under-construction {
+            padding: 30px;
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 10px;
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        /* =========================
+           الجوال
+        ========================== */
+
+        @media (max-width: 1000px) {
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
 
         @media (max-width: 800px) {
 
@@ -148,10 +445,34 @@
                 margin-left: 5px;
             }
 
-            .cards {
-                grid-template-columns: 1fr 1fr;
+            .main {
+                padding: 10px;
             }
+
         }
+
+        @media (max-width: 600px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header,
+            .table-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+        }
+
     </style>
 </head>
 
@@ -159,92 +480,189 @@
 
 <div class="app">
 
-    <!-- القائمة -->
+    <!-- =========================
+         القائمة الجانبية
+    ========================== -->
 
     <aside class="sidebar">
 
         <div class="logo">
+
             شرف ERP
+
+            <small>
+                نظام إدارة الصيدليات
+            </small>
+
         </div>
 
-        <button class="menu-item active" data-page="dashboard">
-            لوحة التحكم
+
+        <button
+            class="menu-item active"
+            data-page="dashboard"
+        >
+            🏠 لوحة التحكم
         </button>
 
-        <button class="menu-item" data-page="sales">
-            المبيعات
+
+        <button
+            class="menu-item"
+            data-page="sales"
+        >
+            🛒 المبيعات
         </button>
 
-        <button class="menu-item" data-page="purchases">
-            المشتريات
+
+        <button
+            class="menu-item"
+            data-page="purchases"
+        >
+            📦 المشتريات
         </button>
 
-        <button class="menu-item" data-page="products">
-            الأصناف والأدوية
+
+        <button
+            class="menu-item"
+            data-page="products"
+        >
+            💊 الأصناف والأدوية
         </button>
 
-        <button class="menu-item" data-page="inventory">
-            المخزون
+
+        <button
+            class="menu-item"
+            data-page="inventory"
+        >
+            🏪 المخزون
         </button>
 
-        <button class="menu-item" data-page="customers">
-            العملاء
+
+        <button
+            class="menu-item"
+            data-page="customers"
+        >
+            👥 العملاء
         </button>
 
-        <button class="menu-item" data-page="suppliers">
-            الموردون
+
+        <button
+            class="menu-item"
+            data-page="suppliers"
+        >
+            🚚 الموردون
         </button>
 
-        <button class="menu-item" data-page="accounts">
-            الحسابات
+
+        <button
+            class="menu-item"
+            data-page="accounts"
+        >
+            💰 الحسابات
         </button>
 
-        <button class="menu-item" data-page="reports">
-            التقارير
+
+        <button
+            class="menu-item"
+            data-page="reports"
+        >
+            📊 التقارير
         </button>
 
-        <button class="menu-item" data-page="settings">
-            الإعدادات
+
+        <button
+            class="menu-item"
+            data-page="settings"
+        >
+            ⚙️ الإعدادات
         </button>
 
     </aside>
 
 
-    <!-- المحتوى -->
+    <!-- =========================
+         المحتوى الرئيسي
+    ========================== -->
 
     <main class="main">
 
         <div class="topbar">
-            <h1 id="pageTitle">لوحة التحكم</h1>
+
+            <h1 id="pageTitle">
+                لوحة التحكم
+            </h1>
+
         </div>
 
 
-        <!-- لوحة التحكم -->
+        <!-- =========================
+             لوحة التحكم
+        ========================== -->
 
-        <section id="dashboard" class="page-section active-section">
+        <section
+            id="dashboard"
+            class="page-section active-section"
+        >
 
-            <h2>لوحة التحكم</h2>
+            <h2>
+                لوحة التحكم
+            </h2>
+
+            <p>
+                ملخص نظام الصيدلية
+            </p>
+
 
             <div class="cards">
 
                 <div class="card">
-                    <h3>المبيعات</h3>
-                    <p>0</p>
+
+                    <h3>
+                        مبيعات اليوم
+                    </h3>
+
+                    <strong id="dashboardSales">
+                        0
+                    </strong>
+
                 </div>
+
 
                 <div class="card">
-                    <h3>المشتريات</h3>
-                    <p>0</p>
+
+                    <h3>
+                        المشتريات اليوم
+                    </h3>
+
+                    <strong id="dashboardPurchases">
+                        0
+                    </strong>
+
                 </div>
+
 
                 <div class="card">
-                    <h3>الأصناف</h3>
-                    <p>0</p>
+
+                    <h3>
+                        عدد الأصناف
+                    </h3>
+
+                    <strong id="dashboardProducts">
+                        0
+                    </strong>
+
                 </div>
+
 
                 <div class="card">
-                    <h3>المخزون</h3>
-                    <p>0</p>
+
+                    <h3>
+                        منخفض المخزون
+                    </h3>
+
+                    <strong id="dashboardLowStock">
+                        0
+                    </strong>
+
                 </div>
 
             </div>
@@ -252,118 +670,531 @@
         </section>
 
 
-        <!-- المبيعات -->
+        <!-- =========================
+             المبيعات
+        ========================== -->
 
-        <section id="sales" class="page-section">
+        <section
+            id="sales"
+            class="page-section"
+        >
 
-            <h2>المبيعات</h2>
+            <h2>
+                المبيعات
+            </h2>
 
             <div class="under-construction">
-                شاشة المبيعات تحت التنفيذ
+                شاشة المبيعات سيتم تنفيذها بعد تثبيت الأصناف والمخزون.
             </div>
 
         </section>
 
 
-        <!-- المشتريات -->
+        <!-- =========================
+             المشتريات
+        ========================== -->
 
-        <section id="purchases" class="page-section">
+        <section
+            id="purchases"
+            class="page-section"
+        >
 
-            <h2>المشتريات</h2>
+            <h2>
+                المشتريات
+            </h2>
 
             <div class="under-construction">
-                شاشة المشتريات تحت التنفيذ
+                شاشة المشتريات سيتم تنفيذها بعد تثبيت الأصناف والمخزون.
             </div>
 
         </section>
 
 
-        <!-- الأصناف -->
+        <!-- =========================
+             الأصناف والأدوية
+        ========================== -->
 
-        <section id="products" class="page-section">
+        <section
+            id="products"
+            class="page-section"
+        >
 
-            <h2>الأصناف والأدوية</h2>
+            <div class="page-header">
 
-            <div class="under-construction">
-                شاشة الأصناف والأدوية تحت التنفيذ
+                <div>
+
+                    <h2>
+                        الأصناف والأدوية
+                    </h2>
+
+                    <p>
+                        إدارة قاعدة أصناف وأدوية الصيدلية
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary-btn"
+                    id="openProductForm"
+                >
+                    + إضافة صنف
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <!-- نموذج إضافة الصنف -->
+
+            <div
+                id="productFormBox"
+                class="product-form-box"
+            >
+
+                <h3 id="formTitle">
+                    إضافة صنف جديد
+                </h3>
+
+
+                <form id="productForm">
+
+                    <input
+                        type="hidden"
+                        id="editProductId"
+                    >
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                اسم الصنف *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productName"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                الاسم العلمي
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productGeneric"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                الباركود
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productBarcode"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                التصنيف
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productCategory"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                الوحدة
+                            </label>
+
+                            <select id="productUnit">
+
+                                <option value="علبة">
+                                    علبة
+                                </option>
+
+                                <option value="شريط">
+                                    شريط
+                                </option>
+
+                                <option value="قطعة">
+                                    قطعة
+                                </option>
+
+                                <option value="زجاجة">
+                                    زجاجة
+                                </option>
+
+                                <option value="عبوة">
+                                    عبوة
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                سعر الشراء
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productPurchasePrice"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                سعر البيع
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productSalePrice"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                الكمية
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productQuantity"
+                                min="0"
+                                step="1"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                الحد الأدنى للمخزون
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productMinimum"
+                                min="0"
+                                step="1"
+                                value="5"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                تاريخ الصلاحية
+                            </label>
+
+                            <input
+                                type="date"
+                                id="productExpiry"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                رقم التشغيلة
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productBatch"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-buttons">
+
+                        <button
+                            type="submit"
+                            class="success-btn"
+                        >
+                            حفظ الصنف
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            id="cancelProduct"
+                        >
+                            إلغاء
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- جدول الأصناف -->
+
+            <div class="table-box">
+
+                <div class="table-toolbar">
+
+                    <strong>
+                        قائمة الأصناف
+                    </strong>
+
+
+                    <input
+                        type="search"
+                        id="productSearch"
+                        class="search-input"
+                        placeholder="ابحث باسم الصنف أو الباركود..."
+                    >
+
+                </div>
+
+
+                <div style="overflow-x:auto;">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    الباركود
+                                </th>
+
+                                <th>
+                                    الصنف
+                                </th>
+
+                                <th>
+                                    الاسم العلمي
+                                </th>
+
+                                <th>
+                                    التصنيف
+                                </th>
+
+                                <th>
+                                    الوحدة
+                                </th>
+
+                                <th>
+                                    الكمية
+                                </th>
+
+                                <th>
+                                    سعر الشراء
+                                </th>
+
+                                <th>
+                                    سعر البيع
+                                </th>
+
+                                <th>
+                                    الصلاحية
+                                </th>
+
+                                <th>
+                                    الحالة
+                                </th>
+
+                                <th>
+                                    الإجراءات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="productsTableBody">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
             </div>
 
         </section>
 
 
-        <!-- المخزون -->
+        <!-- =========================
+             المخزون
+        ========================== -->
 
-        <section id="inventory" class="page-section">
+        <section
+            id="inventory"
+            class="page-section"
+        >
 
-            <h2>المخزون</h2>
+            <h2>
+                المخزون
+            </h2>
 
             <div class="under-construction">
-                شاشة المخزون تحت التنفيذ
+                شاشة المخزون سيتم ربطها بالأصناف بعد تنفيذها.
             </div>
 
         </section>
 
 
-        <!-- العملاء -->
+        <!-- =========================
+             العملاء
+        ========================== -->
 
-        <section id="customers" class="page-section">
+        <section
+            id="customers"
+            class="page-section"
+        >
 
-            <h2>العملاء</h2>
+            <h2>
+                العملاء
+            </h2>
 
             <div class="under-construction">
-                شاشة العملاء تحت التنفيذ
+                شاشة العملاء سيتم تنفيذها.
             </div>
 
         </section>
 
 
-        <!-- الموردون -->
+        <!-- =========================
+             الموردون
+        ========================== -->
 
-        <section id="suppliers" class="page-section">
+        <section
+            id="suppliers"
+            class="page-section"
+        >
 
-            <h2>الموردون</h2>
+            <h2>
+                الموردون
+            </h2>
 
             <div class="under-construction">
-                شاشة الموردين تحت التنفيذ
+                شاشة الموردين سيتم تنفيذها.
             </div>
 
         </section>
 
 
-        <!-- الحسابات -->
+        <!-- =========================
+             الحسابات
+        ========================== -->
 
-        <section id="accounts" class="page-section">
+        <section
+            id="accounts"
+            class="page-section"
+        >
 
-            <h2>الحسابات</h2>
+            <h2>
+                الحسابات
+            </h2>
 
             <div class="under-construction">
-                شاشة الحسابات تحت التنفيذ
+                شاشة الحسابات سيتم تنفيذها.
             </div>
 
         </section>
 
 
-        <!-- التقارير -->
+        <!-- =========================
+             التقارير
+        ========================== -->
 
-        <section id="reports" class="page-section">
+        <section
+            id="reports"
+            class="page-section"
+        >
 
-            <h2>التقارير</h2>
+            <h2>
+                التقارير
+            </h2>
 
             <div class="under-construction">
-                شاشة التقارير تحت التنفيذ
+                شاشة التقارير سيتم تنفيذها.
             </div>
 
         </section>
 
 
-        <!-- الإعدادات -->
+        <!-- =========================
+             الإعدادات
+        ========================== -->
 
-        <section id="settings" class="page-section">
+        <section
+            id="settings"
+            class="page-section"
+        >
 
-            <h2>الإعدادات</h2>
+            <h2>
+                الإعدادات
+            </h2>
 
             <div class="under-construction">
-                شاشة الإعدادات تحت التنفيذ
+                شاشة الإعدادات سيتم تنفيذها.
             </div>
 
         </section>
@@ -375,85 +1206,1288 @@
 
 <script>
 
-    const menuItems = document.querySelectorAll(".menu-item");
+    /* =====================================================
+       التنقل
+    ===================================================== */
 
-    const pages = document.querySelectorAll(".page-section");
+    const menuItems =
+        document.querySelectorAll(
+            ".menu-item"
+        );
 
-    const pageTitle = document.getElementById("pageTitle");
+
+    const pages =
+        document.querySelectorAll(
+            ".page-section"
+        );
+
+
+    const pageTitle =
+        document.getElementById(
+            "pageTitle"
+        );
 
 
     const titles = {
 
-        dashboard: "لوحة التحكم",
+        dashboard:
+            "لوحة التحكم",
 
-        sales: "المبيعات",
+        sales:
+            "المبيعات",
 
-        purchases: "المشتريات",
+        purchases:
+            "المشتريات",
 
-        products: "الأصناف والأدوية",
+        products:
+            "الأصناف والأدوية",
 
-        inventory: "المخزون",
+        inventory:
+            "المخزون",
 
-        customers: "العملاء",
+        customers:
+            "العملاء",
 
-        suppliers: "الموردون",
+        suppliers:
+            "الموردون",
 
-        accounts: "الحسابات",
+        accounts:
+            "الحسابات",
 
-        reports: "التقارير",
+        reports:
+            "التقارير",
 
-        settings: "الإعدادات"
+        settings:
+            "الإعدادات"
 
     };
 
 
-    menuItems.forEach(function(button) {
+    menuItems.forEach(
+        function(button) {
 
-        button.addEventListener("click", function() {
+            button.addEventListener(
+                "click",
+                function() {
 
-            const pageId = this.dataset.page;
-
-
-            pages.forEach(function(page) {
-
-                page.classList.remove("active-section");
-
-            });
+                    const pageId =
+                        this.dataset.page;
 
 
-            menuItems.forEach(function(item) {
+                    pages.forEach(
+                        function(page) {
 
-                item.classList.remove("active");
+                            page.classList.remove(
+                                "active-section"
+                            );
 
-            });
+                        }
+                    );
 
 
-            const selectedPage = document.getElementById(pageId);
+                    menuItems.forEach(
+                        function(item) {
+
+                            item.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
 
 
-            if (selectedPage) {
+                    const selectedPage =
+                        document.getElementById(
+                            pageId
+                        );
 
-                selectedPage.classList.add("active-section");
+
+                    if (selectedPage) {
+
+                        selectedPage.classList.add(
+                            "active-section"
+                        );
+
+                    }
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    if (
+                        titles[pageId]
+                    ) {
+
+                        pageTitle.textContent =
+                            titles[pageId];
+
+                    }
+
+
+                    /*
+                       عند فتح لوحة التحكم
+                       نعيد تحديث الأرقام
+                    */
+
+                    if (
+                        pageId ===
+                        "dashboard"
+                    ) {
+
+                        updateDashboard();
+
+                    }
+
+
+                    /*
+                       عند فتح الأصناف
+                       نعرض البيانات
+                    */
+
+                    if (
+                        pageId ===
+                        "products"
+                    ) {
+
+                        renderProducts();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       قاعدة بيانات الأصناف
+    ===================================================== */
+
+    const STORAGE_KEY =
+        "sharaf_erp_products";
+
+
+    let products = [];
+
+
+    function loadProducts() {
+
+        try {
+
+            const saved =
+                localStorage.getItem(
+                    STORAGE_KEY
+                );
+
+
+            if (saved) {
+
+                products =
+                    JSON.parse(saved);
+
+            } else {
+
+                products = [];
 
             }
 
 
-            this.classList.add("active");
+            if (
+                !Array.isArray(products)
+            ) {
 
-
-            if (titles[pageId]) {
-
-                pageTitle.textContent = titles[pageId];
+                products = [];
 
             }
 
-        });
+        } catch (error) {
 
-    });
+            console.error(
+                "خطأ في تحميل الأصناف:",
+                error
+            );
+
+            products = [];
+
+        }
+
+    }
+
+
+    function saveProducts() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(products)
+        );
+
+    }
+
+
+    /* =====================================================
+       الرسائل
+    ===================================================== */
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        message.textContent =
+            text;
+
+
+        message.className =
+            "message show " +
+            type;
+
+
+        setTimeout(
+            function() {
+
+                message.className =
+                    "message";
+
+            },
+            3000
+        );
+
+    }
+
+
+    /* =====================================================
+       فتح النموذج
+    ===================================================== */
+
+    const openProductForm =
+        document.getElementById(
+            "openProductForm"
+        );
+
+
+    const productFormBox =
+        document.getElementById(
+            "productFormBox"
+        );
+
+
+    const cancelProduct =
+        document.getElementById(
+            "cancelProduct"
+        );
+
+
+    openProductForm.addEventListener(
+        "click",
+        function() {
+
+            resetProductForm();
+
+            productFormBox.classList.add(
+                "show"
+            );
+
+            document
+                .getElementById(
+                    "productName"
+                )
+                .focus();
+
+        }
+    );
+
+
+    cancelProduct.addEventListener(
+        "click",
+        function() {
+
+            productFormBox.classList.remove(
+                "show"
+            );
+
+            resetProductForm();
+
+        }
+    );
+
+
+    /* =====================================================
+       تنظيف النموذج
+    ===================================================== */
+
+    function resetProductForm() {
+
+        document
+            .getElementById(
+                "productForm"
+            )
+            .reset();
+
+
+        document
+            .getElementById(
+                "editProductId"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "productQuantity"
+            )
+            .value = "0";
+
+
+        document
+            .getElementById(
+                "productMinimum"
+            )
+            .value = "5";
+
+
+        document
+            .getElementById(
+                "formTitle"
+            )
+            .textContent =
+            "إضافة صنف جديد";
+
+    }
+
+
+    /* =====================================================
+       حفظ الصنف
+    ===================================================== */
+
+    document
+        .getElementById(
+            "productForm"
+        )
+        .addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const id =
+                    document
+                        .getElementById(
+                            "editProductId"
+                        )
+                        .value;
+
+
+                const name =
+                    document
+                        .getElementById(
+                            "productName"
+                        )
+                        .value
+                        .trim();
+
+
+                const generic =
+                    document
+                        .getElementById(
+                            "productGeneric"
+                        )
+                        .value
+                        .trim();
+
+
+                const barcode =
+                    document
+                        .getElementById(
+                            "productBarcode"
+                        )
+                        .value
+                        .trim();
+
+
+                const category =
+                    document
+                        .getElementById(
+                            "productCategory"
+                        )
+                        .value
+                        .trim();
+
+
+                const unit =
+                    document
+                        .getElementById(
+                            "productUnit"
+                        )
+                        .value;
+
+
+                const purchasePrice =
+                    Number(
+                        document
+                            .getElementById(
+                                "productPurchasePrice"
+                            )
+                            .value
+                    ) || 0;
+
+
+                const salePrice =
+                    Number(
+                        document
+                            .getElementById(
+                                "productSalePrice"
+                            )
+                            .value
+                    ) || 0;
+
+
+                const quantity =
+                    Number(
+                        document
+                            .getElementById(
+                                "productQuantity"
+                            )
+                            .value
+                    ) || 0;
+
+
+                const minimum =
+                    Number(
+                        document
+                            .getElementById(
+                                "productMinimum"
+                            )
+                            .value
+                    ) || 0;
+
+
+                const expiry =
+                    document
+                        .getElementById(
+                            "productExpiry"
+                        )
+                        .value;
+
+
+                const batch =
+                    document
+                        .getElementById(
+                            "productBatch"
+                        )
+                        .value
+                        .trim();
+
+
+                /* التحقق */
+
+                if (!name) {
+
+                    showMessage(
+                        "يجب إدخال اسم الصنف.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    purchasePrice < 0 ||
+                    salePrice < 0 ||
+                    quantity < 0 ||
+                    minimum < 0
+                ) {
+
+                    showMessage(
+                        "القيم الرقمية غير صحيحة.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                   منع تكرار الباركود
+                */
+
+                const duplicate =
+                    products.find(
+                        function(product) {
+
+                            return (
+                                barcode &&
+                                product.barcode === barcode &&
+                                String(product.id) !==
+                                String(id)
+                            );
+
+                        }
+                    );
+
+
+                if (duplicate) {
+
+                    showMessage(
+                        "هذا الباركود مستخدم بالفعل.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /* =========================
+                   تعديل صنف
+                ========================== */
+
+                if (id) {
+
+                    const product =
+                        products.find(
+                            function(item) {
+
+                                return String(
+                                    item.id
+                                ) === String(id);
+
+                            }
+                        );
+
+
+                    if (!product) {
+
+                        showMessage(
+                            "الصنف غير موجود.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    product.name =
+                        name;
+
+                    product.generic =
+                        generic;
+
+                    product.barcode =
+                        barcode;
+
+                    product.category =
+                        category;
+
+                    product.unit =
+                        unit;
+
+                    product.purchasePrice =
+                        purchasePrice;
+
+                    product.salePrice =
+                        salePrice;
+
+                    product.quantity =
+                        quantity;
+
+                    product.minimum =
+                        minimum;
+
+                    product.expiry =
+                        expiry;
+
+                    product.batch =
+                        batch;
+
+
+                    saveProducts();
+
+                    renderProducts();
+
+                    updateDashboard();
+
+
+                    productFormBox.classList.remove(
+                        "show"
+                    );
+
+
+                    resetProductForm();
+
+
+                    showMessage(
+                        "تم تعديل الصنف بنجاح.",
+                        "success"
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* =========================
+                   إضافة صنف جديد
+                ========================== */
+
+                const product = {
+
+                    id:
+                        Date.now(),
+
+                    name:
+                        name,
+
+                    generic:
+                        generic,
+
+                    barcode:
+                        barcode,
+
+                    category:
+                        category,
+
+                    unit:
+                        unit,
+
+                    purchasePrice:
+                        purchasePrice,
+
+                    salePrice:
+                        salePrice,
+
+                    quantity:
+                        quantity,
+
+                    minimum:
+                        minimum,
+
+                    expiry:
+                        expiry,
+
+                    batch:
+                        batch,
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                products.push(
+                    product
+                );
+
+
+                saveProducts();
+
+                renderProducts();
+
+                updateDashboard();
+
+
+                productFormBox.classList.remove(
+                    "show"
+                );
+
+
+                resetProductForm();
+
+
+                showMessage(
+                    "تم حفظ الصنف بنجاح.",
+                    "success"
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       حالة الصنف
+    ===================================================== */
+
+    function getStatus(
+        product
+    ) {
+
+        if (
+            Number(
+                product.quantity
+            ) <= 0
+        ) {
+
+            return {
+                text: "نافد",
+                className: "status-out"
+            };
+
+        }
+
+
+        if (
+            Number(
+                product.minimum
+            ) > 0 &&
+            Number(
+                product.quantity
+            ) <=
+            Number(
+                product.minimum
+            )
+        ) {
+
+            return {
+                text: "منخفض",
+                className: "status-low"
+            };
+
+        }
+
+
+        return {
+            text: "متوفر",
+            className: "status-good"
+        };
+
+    }
+
+
+    /* =====================================================
+       عرض الأصناف
+    ===================================================== */
+
+    function renderProducts() {
+
+        const tbody =
+            document.getElementById(
+                "productsTableBody"
+            );
+
+
+        const search =
+            document
+                .getElementById(
+                    "productSearch"
+                )
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const filtered =
+            products.filter(
+                function(product) {
+
+                    const name =
+                        String(
+                            product.name ||
+                            ""
+                        )
+                            .toLowerCase();
+
+
+                    const generic =
+                        String(
+                            product.generic ||
+                            ""
+                        )
+                            .toLowerCase();
+
+
+                    const barcode =
+                        String(
+                            product.barcode ||
+                            ""
+                        )
+                            .toLowerCase();
+
+
+                    return (
+                        name.includes(search) ||
+                        generic.includes(search) ||
+                        barcode.includes(search)
+                    );
+
+                }
+            );
+
+
+        if (
+            filtered.length === 0
+        ) {
+
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="12"
+                        class="empty-row"
+                    >
+                        لا توجد أصناف مسجلة
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        tbody.innerHTML =
+            filtered
+                .map(
+                    function(product, index) {
+
+                        const status =
+                            getStatus(product);
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+                                    ${index + 1}
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.barcode ||
+                                        "-"
+                                    }
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ${
+                                            product.name
+                                        }
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.generic ||
+                                        "-"
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.category ||
+                                        "-"
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.unit
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.quantity
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        Number(
+                                            product.purchasePrice
+                                        ).toFixed(2)
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        Number(
+                                            product.salePrice
+                                        ).toFixed(2)
+                                    }
+                                </td>
+
+                                <td>
+                                    ${
+                                        product.expiry ||
+                                        "-"
+                                    }
+                                </td>
+
+                                <td>
+
+                                    <span
+                                        class="status ${
+                                            status.className
+                                        }"
+                                    >
+                                        ${
+                                            status.text
+                                        }
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <div
+                                        class="action-buttons"
+                                    >
+
+                                        <button
+                                            class="edit-btn"
+                                            onclick="editProduct(${product.id})"
+                                        >
+                                            تعديل
+                                        </button>
+
+                                        <button
+                                            class="danger-btn"
+                                            onclick="deleteProduct(${product.id})"
+                                        >
+                                            حذف
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    /* =====================================================
+       البحث
+    ===================================================== */
+
+    document
+        .getElementById(
+            "productSearch"
+        )
+        .addEventListener(
+            "input",
+            function() {
+
+                renderProducts();
+
+            }
+        );
+
+
+    /* =====================================================
+       تعديل صنف
+    ===================================================== */
+
+    window.editProduct =
+        function(id) {
+
+            const product =
+                products.find(
+                    function(item) {
+
+                        return Number(
+                            item.id
+                        ) === Number(id);
+
+                    }
+                );
+
+
+            if (!product) {
+
+                showMessage(
+                    "الصنف غير موجود.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            document
+                .getElementById(
+                    "editProductId"
+                )
+                .value =
+                product.id;
+
+
+            document
+                .getElementById(
+                    "productName"
+                )
+                .value =
+                product.name;
+
+
+            document
+                .getElementById(
+                    "productGeneric"
+                )
+                .value =
+                product.generic || "";
+
+
+            document
+                .getElementById(
+                    "productBarcode"
+                )
+                .value =
+                product.barcode || "";
+
+
+            document
+                .getElementById(
+                    "productCategory"
+                )
+                .value =
+                product.category || "";
+
+
+            document
+                .getElementById(
+                    "productUnit"
+                )
+                .value =
+                product.unit || "علبة";
+
+
+            document
+                .getElementById(
+                    "productPurchasePrice"
+                )
+                .value =
+                product.purchasePrice;
+
+
+            document
+                .getElementById(
+                    "productSalePrice"
+                )
+                .value =
+                product.salePrice;
+
+
+            document
+                .getElementById(
+                    "productQuantity"
+                )
+                .value =
+                product.quantity;
+
+
+            document
+                .getElementById(
+                    "productMinimum"
+                )
+                .value =
+                product.minimum;
+
+
+            document
+                .getElementById(
+                    "productExpiry"
+                )
+                .value =
+                product.expiry || "";
+
+
+            document
+                .getElementById(
+                    "productBatch"
+                )
+                .value =
+                product.batch || "";
+
+
+            document
+                .getElementById(
+                    "formTitle"
+                )
+                .textContent =
+                "تعديل الصنف";
+
+
+            productFormBox.classList.add(
+                "show"
+            );
+
+
+            document
+                .getElementById(
+                    "productName"
+                )
+                .focus();
+
+        };
+
+
+    /* =====================================================
+       حذف صنف
+    ===================================================== */
+
+    window.deleteProduct =
+        function(id) {
+
+            const product =
+                products.find(
+                    function(item) {
+
+                        return Number(
+                            item.id
+                        ) === Number(id);
+
+                    }
+                );
+
+
+            if (!product) {
+                return;
+            }
+
+
+            const confirmed =
+                confirm(
+                    "هل تريد حذف الصنف: " +
+                    product.name +
+                    " ؟"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            products =
+                products.filter(
+                    function(item) {
+
+                        return Number(
+                            item.id
+                        ) !== Number(id);
+
+                    }
+                );
+
+
+            saveProducts();
+
+            renderProducts();
+
+            updateDashboard();
+
+
+            showMessage(
+                "تم حذف الصنف.",
+                "success"
+            );
+
+        };
+
+
+    /* =====================================================
+       لوحة التحكم
+    ===================================================== */
+
+    function updateDashboard() {
+
+        document
+            .getElementById(
+                "dashboardProducts"
+            )
+            .textContent =
+            products.length;
+
+
+        const lowStock =
+            products.filter(
+                function(product) {
+
+                    return (
+                        Number(
+                            product.quantity
+                        ) > 0 &&
+                        Number(
+                            product.quantity
+                        ) <=
+                        Number(
+                            product.minimum
+                        )
+                    );
+
+                }
+            ).length;
+
+
+        document
+            .getElementById(
+                "dashboardLowStock"
+            )
+            .textContent =
+            lowStock;
+
+
+        /*
+           المبيعات والمشتريات الآن صفر
+           لأننا لم ننفذهما بعد.
+        */
+
+        document
+            .getElementById(
+                "dashboardSales"
+            )
+            .textContent =
+            "0";
+
+
+        document
+            .getElementById(
+                "dashboardPurchases"
+            )
+            .textContent =
+            "0";
+
+    }
+
+
+    /* =====================================================
+       التشغيل الأول
+    ===================================================== */
+
+    loadProducts();
+
+    renderProducts();
+
+    updateDashboard();
 
 </script>
 
-
 </body>
-
 </html>
