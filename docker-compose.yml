@@ -1,0 +1,21 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: sharaf-erp-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: sharaf_erp
+      POSTGRES_USER: sharaf
+      POSTGRES_PASSWORD: sharaf123
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - sharaf_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  sharaf_postgres_data:
