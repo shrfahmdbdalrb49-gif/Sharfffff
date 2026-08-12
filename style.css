@@ -10,8 +10,14 @@ body {
     color: #1f2937;
 }
 
-button {
+button,
+input,
+select {
     font-family: inherit;
+}
+
+button {
+    cursor: pointer;
 }
 
 .app {
@@ -20,7 +26,7 @@ button {
 }
 
 /* =========================
-   القائمة الجانبية
+   Sidebar
 ========================= */
 
 .sidebar {
@@ -29,6 +35,11 @@ button {
     background: #172554;
     color: white;
     padding: 20px 14px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
 }
 
 .logo {
@@ -61,7 +72,9 @@ button {
     text-align: right;
     padding: 13px 14px;
     border-radius: 8px;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 15px;
     transition: 0.2s;
 }
@@ -76,16 +89,17 @@ button {
 }
 
 /* =========================
-   المحتوى الرئيسي
+   Main
 ========================= */
 
 .main {
     flex: 1;
+    margin-right: 250px;
     min-width: 0;
 }
 
 /* =========================
-   الشريط العلوي
+   Topbar
 ========================= */
 
 .topbar {
@@ -95,6 +109,9 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .topbar h1 {
@@ -116,19 +133,44 @@ button {
 }
 
 /* =========================
-   لوحة التحكم
+   Sections
+========================= */
+
+.page-section {
+    display: none;
+    padding: 25px;
+}
+
+.page-section.active-section {
+    display: block;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-heading h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.page-heading p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* =========================
+   Dashboard
 ========================= */
 
 .dashboard {
-    padding: 25px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
 }
-
-/* =========================
-   البطاقات الإحصائية
-========================= */
 
 .stat-card {
     background: white;
@@ -155,26 +197,45 @@ button {
     color: #94a3b8;
 }
 
+.warning-card strong {
+    color: #dc2626;
+}
+
+.dashboard-panel {
+    min-height: 280px;
+}
+
+.dashboard .panel {
+    grid-column: span 2;
+}
+
 /* =========================
-   اللوحات
+   Panels
 ========================= */
 
 .panel {
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
-    min-height: 280px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .panel-header {
     padding: 18px 20px;
     border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .panel-header h2 {
     font-size: 17px;
 }
+
+/* =========================
+   Empty State
+========================= */
 
 .empty-state {
     padding: 50px 20px;
@@ -182,27 +243,228 @@ button {
     color: #94a3b8;
 }
 
+.large-empty {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.large-empty h3 {
+    color: #475569;
+}
+
+.large-empty p {
+    max-width: 550px;
+    line-height: 1.8;
+}
+
+.empty-icon {
+    font-size: 42px;
+}
+
 /* =========================
-   استجابة الشاشات
+   Buttons
 ========================= */
 
-@media (max-width: 1000px) {
+.primary-button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 14px;
+}
+
+.primary-button:hover {
+    background: #1d4ed8;
+}
+
+.secondary-button {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 14px;
+}
+
+.secondary-button:hover {
+    background: #d1d5db;
+}
+
+/* =========================
+   Forms
+========================= */
+
+.form-panel {
+    padding: 0;
+}
+
+.form-panel form {
+    padding: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #475569;
+}
+
+.form-group input,
+.form-group select {
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    padding: 11px;
+    outline: none;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   Search
+========================= */
+
+.product-toolbar {
+    gap: 20px;
+}
+
+.search-input {
+    width: 320px;
+    max-width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #2563eb;
+}
+
+/* =========================
+   Tables
+========================= */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f8fafc;
+}
+
+th,
+td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: right;
+    white-space: nowrap;
+}
+
+th {
+    font-size: 13px;
+    color: #475569;
+}
+
+td {
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-good {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-low {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-empty {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 1100px) {
 
     .dashboard {
         grid-template-columns: repeat(2, 1fr);
     }
 
-}
-
-@media (max-width: 700px) {
-
-    .app {
-        flex-direction: column;
+    .dashboard .panel {
+        grid-column: span 2;
     }
 
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 800px) {
+
     .sidebar {
+        position: relative;
         width: 100%;
         min-height: auto;
+    }
+
+    .main {
+        margin-right: 0;
+    }
+
+    .app {
+        display: block;
     }
 
     .sidebar nav {
@@ -210,13 +472,43 @@ button {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .topbar {
+        position: relative;
+    }
+
+}
+
+@media (max-width: 600px) {
+
     .dashboard {
         grid-template-columns: 1fr;
+    }
+
+    .dashboard .panel {
+        grid-column: span 1;
+    }
+
+    .page-section {
         padding: 15px;
     }
 
-    .topbar {
-        padding: 18px;
+    .page-heading {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
     }
 
 }
