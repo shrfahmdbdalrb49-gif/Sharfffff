@@ -23,104 +23,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("فتح الشاشة:", sectionId);
 
-        /*
-         * إخفاء جميع الشاشات
-         */
         sections.forEach(function (section) {
             section.classList.remove("active-section");
         });
 
-
-        /*
-         * إزالة التحديد من القوائم
-         */
         menuItems.forEach(function (item) {
             item.classList.remove("active");
         });
 
-
-        /*
-         * إظهار الشاشة المطلوبة
-         */
         const selectedSection =
             document.getElementById(sectionId);
 
         if (selectedSection) {
             selectedSection.classList.add("active-section");
-        } else {
-            console.error(
-                "الشاشة غير موجودة:",
-                sectionId
-            );
         }
 
-
-        /*
-         * تحديد القائمة الحالية
-         */
         const selectedMenu =
             document.querySelector(
-                `.menu-item[data-section="${sectionId}"]`
+                `.menu-item[data-page="${sectionId}"]`
             );
 
         if (selectedMenu) {
             selectedMenu.classList.add("active");
         }
 
-
-        /*
-         * تغيير عنوان الصفحة
-         */
-        if (
-            pageTitle &&
-            pageTitles[sectionId]
-        ) {
+        if (pageTitle && pageTitles[sectionId]) {
             pageTitle.textContent =
                 pageTitles[sectionId];
         }
 
-
-        /*
-         * إذا فتحنا الحسابات،
-         * نبني شاشة شجرة الحسابات
-         */
         if (
             sectionId === "accounts" &&
-            typeof buildAccountsPage === "function"
+            typeof renderAccounts === "function"
         ) {
-            buildAccountsPage();
+            renderAccounts();
         }
 
+        if (
+            sectionId === "products" &&
+            typeof renderProducts === "function"
+        ) {
+            renderProducts();
+        }
+
+        if (
+            sectionId === "dashboard" &&
+            typeof updateDashboard === "function"
+        ) {
+            updateDashboard();
+        }
     }
 
-
-    /*
-     * تشغيل جميع أزرار القائمة
-     */
     menuItems.forEach(function (button) {
 
-        button.addEventListener(
-            "click",
-            function () {
+        button.addEventListener("click", function () {
 
-                const sectionId =
-                    this.getAttribute(
-                        "data-section"
-                    );
+            const sectionId =
+                this.getAttribute("data-page");
 
-                if (sectionId) {
-                    showPage(sectionId);
-                }
-
+            if (sectionId) {
+                showPage(sectionId);
             }
-        );
+
+        });
 
     });
 
-
-    /*
-     * تشغيل لوحة التحكم عند فتح النظام
-     */
     showPage("dashboard");
 
 });
