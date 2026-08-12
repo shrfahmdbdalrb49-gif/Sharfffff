@@ -2,126 +2,79 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>شرف ERP - نظام إدارة الصيدليات</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- القائمة الجانبية -->
+    <!-- ==================================================
+         SIDEBAR
+    =================================================== -->
 
     <aside class="sidebar">
 
-        <div class="logo">
-
-            <h2>شرف ERP</h2>
-
-            <span>
-                نظام إدارة الصيدليات
-            </span>
-
+        <div class="brand">
+            <div class="brand-title">شرف ERP</div>
+            <div class="brand-subtitle">نظام إدارة الصيدليات</div>
         </div>
 
+        <nav class="sidebar-nav">
 
-        <nav>
-
-            <button class="menu-item active"
-                    data-section="dashboard">
-
-                🏠
+            <button class="nav-item active" data-page="dashboard">
+                <span>🏠</span>
                 <span>لوحة التحكم</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="sales">
-
-                🛒
+            <button class="nav-item" data-page="sales">
+                <span>🛒</span>
                 <span>المبيعات</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="purchases">
-
-                📦
+            <button class="nav-item" data-page="purchases">
+                <span>📦</span>
                 <span>المشتريات</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="products">
-
-                💊
+            <button class="nav-item" data-page="products">
+                <span>💊</span>
                 <span>الأصناف والأدوية</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="inventory">
-
-                🏪
+            <button class="nav-item" data-page="inventory">
+                <span>🏪</span>
                 <span>المخزون</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="customers">
-
-                👥
+            <button class="nav-item" data-page="customers">
+                <span>👥</span>
                 <span>العملاء</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="suppliers">
-
-                🚚
+            <button class="nav-item" data-page="suppliers">
+                <span>🚚</span>
                 <span>الموردون</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="accounts">
-
-                💰
+            <button class="nav-item" data-page="accounts">
+                <span>💰</span>
                 <span>الحسابات</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="reports">
-
-                📊
+            <button class="nav-item" data-page="reports">
+                <span>📊</span>
                 <span>التقارير</span>
-
             </button>
 
-
-            <button class="menu-item"
-                    data-section="settings">
-
-                ⚙️
+            <button class="nav-item" data-page="settings">
+                <span>⚙️</span>
                 <span>الإعدادات</span>
-
             </button>
 
         </nav>
@@ -129,642 +82,1124 @@
     </aside>
 
 
-    <!-- المحتوى -->
+    <!-- ==================================================
+         MAIN
+    =================================================== -->
 
     <main class="main">
 
         <header class="topbar">
 
             <div>
-
-                <h1 id="pageTitle">
-                    لوحة التحكم
-                </h1>
-
-                <p>
-                    نظام إدارة الصيدليات
-                </p>
-
+                <h1 id="pageTitle">لوحة التحكم</h1>
+                <div id="pageSubtitle">
+                    نظرة عامة على عمليات الصيدلية
+                </div>
             </div>
 
-
-            <div class="user-area">
-
-                المدير
-
+            <div class="topbar-info">
+                <span id="currentDate"></span>
+                <strong>المدير</strong>
             </div>
 
         </header>
 
 
-        <!-- لوحة التحكم -->
-
-        <section id="dashboard"
-                 class="page-section active-section">
-
-            <div class="page-heading">
-
-                <div>
-
-                    <h2>
-                        لوحة التحكم
-                    </h2>
-
-                    <p>
-                        نظرة عامة على عمليات الصيدلية
-                    </p>
-
-                </div>
-
-            </div>
+        <div class="content">
 
 
-            <div class="dashboard">
+            <!-- ==================================================
+                 DASHBOARD
+            =================================================== -->
 
-                <div class="stat-card">
+            <section class="page active" id="page-dashboard">
 
-                    <span>
-                        مبيعات اليوم
-                    </span>
-
-                    <strong>
-                        0
-                    </strong>
-
-                    <small>
-                        ريال يمني
-                    </small>
-
+                <div class="section-head">
+                    <div>
+                        <h2>لوحة التحكم</h2>
+                        <p>ملخص العمليات والبيانات الحالية</p>
+                    </div>
                 </div>
 
 
-                <div class="stat-card">
+                <div class="stats-grid">
 
-                    <span>
-                        مشتريات اليوم
-                    </span>
+                    <div class="stat-card">
+                        <span>مبيعات اليوم</span>
+                        <strong id="dashboard-sales">0</strong>
+                        <small>ريال يمني</small>
+                    </div>
 
-                    <strong>
-                        0
-                    </strong>
+                    <div class="stat-card">
+                        <span>مشتريات اليوم</span>
+                        <strong id="dashboard-purchases">0</strong>
+                        <small>ريال يمني</small>
+                    </div>
 
-                    <small>
-                        ريال يمني
-                    </small>
+                    <div class="stat-card">
+                        <span>قيمة المخزون</span>
+                        <strong id="dashboard-stock-value">0</strong>
+                        <small>ريال يمني</small>
+                    </div>
 
-                </div>
+                    <div class="stat-card warning">
+                        <span>منخفض المخزون</span>
+                        <strong id="dashboard-low-stock">0</strong>
+                        <small>صنف</small>
+                    </div>
 
+                    <div class="stat-card danger">
+                        <span>نافد المخزون</span>
+                        <strong id="dashboard-out-stock">0</strong>
+                        <small>صنف</small>
+                    </div>
 
-                <div class="stat-card">
-
-                    <span>
-                        عدد الأصناف
-                    </span>
-
-                    <strong>
-                        0
-                    </strong>
-
-                    <small>
-                        صنف
-                    </small>
+                    <div class="stat-card">
+                        <span>عدد الأصناف</span>
+                        <strong id="dashboard-products">0</strong>
+                        <small>صنف</small>
+                    </div>
 
                 </div>
 
 
-                <div class="stat-card">
+                <div class="two-columns">
 
-                    <span>
-                        منخفض المخزون
-                    </span>
+                    <div class="panel">
 
-                    <strong>
-                        0
-                    </strong>
-
-                    <small>
-                        صنف
-                    </small>
-
-                </div>
-
-
-                <div class="panel dashboard-panel">
-
-                    <div class="panel-header">
-
-                        <h2>
+                        <div class="panel-title">
                             آخر المبيعات
-                        </h2>
+                        </div>
+
+                        <div id="dashboard-sales-list"></div>
 
                     </div>
 
-                    <div class="empty-state">
 
-                        لا توجد مبيعات حتى الآن
+                    <div class="panel">
 
-                    </div>
-
-                </div>
-
-
-                <div class="panel dashboard-panel">
-
-                    <div class="panel-header">
-
-                        <h2>
+                        <div class="panel-title">
                             تنبيهات المخزون
-                        </h2>
+                        </div>
 
-                    </div>
-
-                    <div class="empty-state">
-
-                        لا توجد تنبيهات
+                        <div id="dashboard-alerts"></div>
 
                     </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <!-- المبيعات -->
+            <!-- ==================================================
+                 SALES
+            =================================================== -->
 
-        <section id="sales"
-                 class="page-section">
+            <section class="page" id="page-sales">
 
-            <div class="page-heading">
+                <div class="section-head">
+                    <div>
+                        <h2>المبيعات</h2>
+                        <p>إنشاء فواتير البيع وخصم الكميات من المخزون</p>
+                    </div>
+                </div>
 
-                <div>
 
-                    <h2>
-                        المبيعات
-                    </h2>
+                <div class="panel">
 
-                    <p>
-                        إدارة فواتير مبيعات الصيدلية
-                    </p>
+                    <div class="panel-title">
+                        فاتورة بيع جديدة
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>رقم الفاتورة</label>
+                            <input id="sale-number" readonly>
+                        </div>
+
+                        <div class="field">
+                            <label>التاريخ</label>
+                            <input type="date" id="sale-date">
+                        </div>
+
+                        <div class="field">
+                            <label>العميل</label>
+                            <select id="sale-customer"></select>
+                        </div>
+
+                        <div class="field">
+                            <label>طريقة الدفع</label>
+                            <select id="sale-payment">
+                                <option value="cash">نقدي</option>
+                                <option value="credit">آجل</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <div class="invoice-add-row">
+
+                        <div class="field large">
+                            <label>الصنف / الباركود</label>
+                            <select id="sale-product"></select>
+                        </div>
+
+                        <div class="field small">
+                            <label>الكمية</label>
+                            <input
+                                type="number"
+                                id="sale-qty"
+                                value="1"
+                                min="1"
+                            >
+                        </div>
+
+                        <button
+                            class="btn primary"
+                            id="add-sale-line"
+                        >
+                            إضافة
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>الصنف</th>
+                                    <th>الكمية</th>
+                                    <th>السعر</th>
+                                    <th>الإجمالي</th>
+                                    <th>حذف</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="sale-lines"></tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="invoice-footer">
+
+                        <div>
+                            <label>الخصم</label>
+                            <input
+                                type="number"
+                                id="sale-discount"
+                                value="0"
+                                min="0"
+                            >
+                        </div>
+
+                        <div class="invoice-total">
+                            الإجمالي:
+                            <strong id="sale-total">0.00</strong>
+                        </div>
+
+                        <button
+                            class="btn success"
+                            id="save-sale"
+                        >
+                            اعتماد فاتورة البيع
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        فواتير البيع
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>التاريخ</th>
+                                    <th>العميل</th>
+                                    <th>الدفع</th>
+                                    <th>الإجمالي</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="sales-history"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
 
 
-            <div class="panel">
+            <!-- ==================================================
+                 PURCHASES
+            =================================================== -->
 
-                <div class="empty-state large-empty">
+            <section class="page" id="page-purchases">
 
-                    <div class="empty-icon">
+                <div class="section-head">
+
+                    <div>
+                        <h2>المشتريات</h2>
+                        <p>إنشاء فواتير الشراء وإضافة الكميات للمخزون</p>
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        فاتورة شراء جديدة
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>رقم الفاتورة</label>
+                            <input id="purchase-number" readonly>
+                        </div>
+
+                        <div class="field">
+                            <label>التاريخ</label>
+                            <input type="date" id="purchase-date">
+                        </div>
+
+                        <div class="field">
+                            <label>المورد</label>
+                            <select id="purchase-supplier"></select>
+                        </div>
+
+                    </div>
+
+
+                    <div class="invoice-add-row">
+
+                        <div class="field large">
+                            <label>الصنف</label>
+                            <select id="purchase-product"></select>
+                        </div>
+
+                        <div class="field small">
+                            <label>الكمية</label>
+                            <input
+                                type="number"
+                                id="purchase-qty"
+                                value="1"
+                                min="1"
+                            >
+                        </div>
+
+                        <div class="field small">
+                            <label>سعر الشراء</label>
+                            <input
+                                type="number"
+                                id="purchase-price"
+                                value="0"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <button
+                            class="btn primary"
+                            id="add-purchase-line"
+                        >
+                            إضافة
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>الصنف</th>
+                                    <th>الكمية</th>
+                                    <th>سعر الشراء</th>
+                                    <th>الإجمالي</th>
+                                    <th>حذف</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="purchase-lines"></tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="invoice-footer">
+
+                        <div>
+                            <label>الخصم</label>
+
+                            <input
+                                type="number"
+                                id="purchase-discount"
+                                value="0"
+                                min="0"
+                            >
+                        </div>
+
+                        <div class="invoice-total">
+
+                            الإجمالي:
+                            <strong id="purchase-total">
+                                0.00
+                            </strong>
+
+                        </div>
+
+                        <button
+                            class="btn success"
+                            id="save-purchase"
+                        >
+                            اعتماد فاتورة الشراء
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        فواتير الشراء
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>التاريخ</th>
+                                    <th>المورد</th>
+                                    <th>الإجمالي</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="purchases-history"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 PRODUCTS
+            =================================================== -->
+
+            <section class="page" id="page-products">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>الأصناف والأدوية</h2>
+                        <p>إدارة قاعدة أصناف الصيدلية</p>
+                    </div>
+
+                    <button class="btn primary" id="open-product-form">
+                        + إضافة صنف
+                    </button>
+
+                </div>
+
+
+                <div class="panel hidden" id="product-form-panel">
+
+                    <div class="panel-title">
+                        إضافة / تعديل صنف
+                    </div>
+
+
+                    <form id="product-form">
+
+                        <input type="hidden" id="product-id">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>اسم الصنف</label>
+                                <input id="product-name" required>
+                            </div>
+
+                            <div class="field">
+                                <label>الاسم العلمي</label>
+                                <input id="product-generic">
+                            </div>
+
+                            <div class="field">
+                                <label>الباركود</label>
+                                <input id="product-barcode">
+                            </div>
+
+                            <div class="field">
+                                <label>التصنيف</label>
+                                <input id="product-category">
+                            </div>
+
+                            <div class="field">
+                                <label>الوحدة</label>
+                                <select id="product-unit">
+                                    <option value="علبة">علبة</option>
+                                    <option value="شريط">شريط</option>
+                                    <option value="قطعة">قطعة</option>
+                                    <option value="زجاجة">زجاجة</option>
+                                    <option value="عبوة">عبوة</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label>سعر الشراء</label>
+                                <input
+                                    type="number"
+                                    id="product-purchase-price"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>سعر البيع</label>
+                                <input
+                                    type="number"
+                                    id="product-sale-price"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>الكمية الحالية</label>
+                                <input
+                                    type="number"
+                                    id="product-quantity"
+                                    min="0"
+                                    value="0"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>الحد الأدنى</label>
+                                <input
+                                    type="number"
+                                    id="product-minimum"
+                                    min="0"
+                                    value="5"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>تاريخ الصلاحية</label>
+                                <input
+                                    type="date"
+                                    id="product-expiry"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label>رقم التشغيلة</label>
+                                <input id="product-batch">
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button class="btn success" type="submit">
+                                حفظ الصنف
+                            </button>
+
+                            <button
+                                class="btn secondary"
+                                type="button"
+                                id="cancel-product"
+                            >
+                                إلغاء
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title toolbar">
+
+                        <span>قائمة الأصناف</span>
+
+                        <input
+                            class="search"
+                            id="product-search"
+                            placeholder="بحث بالاسم أو الباركود..."
+                        >
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>الباركود</th>
+                                    <th>الصنف</th>
+                                    <th>العلمي</th>
+                                    <th>التصنيف</th>
+                                    <th>الكمية</th>
+                                    <th>البيع</th>
+                                    <th>الصلاحية</th>
+                                    <th>الحالة</th>
+                                    <th>إجراءات</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="products-table"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 INVENTORY
+            =================================================== -->
+
+            <section class="page" id="page-inventory">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>المخزون</h2>
+                        <p>متابعة الكميات والصلاحيات والحالات</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid inventory-stats">
+
+                    <div class="stat-card">
+                        <span>إجمالي الأصناف</span>
+                        <strong id="inventory-product-count">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>منخفض المخزون</span>
+                        <strong id="inventory-low-count">0</strong>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <span>نافد</span>
+                        <strong id="inventory-out-count">0</strong>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <span>منتهي الصلاحية</span>
+                        <strong id="inventory-expired-count">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        حالة المخزون
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>الصنف</th>
+                                    <th>الباركود</th>
+                                    <th>الكمية</th>
+                                    <th>الحد الأدنى</th>
+                                    <th>الشراء</th>
+                                    <th>قيمة المخزون</th>
+                                    <th>الصلاحية</th>
+                                    <th>الحالة</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="inventory-table"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 CUSTOMERS
+            =================================================== -->
+
+            <section class="page" id="page-customers">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>العملاء</h2>
+                        <p>إدارة العملاء وأرصدة المبيعات الآجلة</p>
+                    </div>
+
+                    <button class="btn primary" id="open-customer-form">
+                        + إضافة عميل
+                    </button>
+
+                </div>
+
+
+                <div class="panel hidden" id="customer-form-panel">
+
+                    <div class="panel-title">
+                        إضافة عميل
+                    </div>
+
+                    <form id="customer-form">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>اسم العميل</label>
+                                <input id="customer-name" required>
+                            </div>
+
+                            <div class="field">
+                                <label>الهاتف</label>
+                                <input id="customer-phone">
+                            </div>
+
+                            <div class="field">
+                                <label>العنوان</label>
+                                <input id="customer-address">
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn success">
+                                حفظ
+                            </button>
+
+                            <button
+                                class="btn secondary"
+                                type="button"
+                                id="cancel-customer"
+                            >
+                                إلغاء
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        العملاء
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>#</th>
+                                    <th>الاسم</th>
+                                    <th>الهاتف</th>
+                                    <th>العنوان</th>
+                                    <th>الرصيد</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="customers-table"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 SUPPLIERS
+            =================================================== -->
+
+            <section class="page" id="page-suppliers">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>الموردون</h2>
+                        <p>إدارة الموردين وأرصدة المشتريات الآجلة</p>
+                    </div>
+
+                    <button class="btn primary" id="open-supplier-form">
+                        + إضافة مورد
+                    </button>
+
+                </div>
+
+
+                <div class="panel hidden" id="supplier-form-panel">
+
+                    <div class="panel-title">
+                        إضافة مورد
+                    </div>
+
+                    <form id="supplier-form">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>اسم المورد</label>
+                                <input id="supplier-name" required>
+                            </div>
+
+                            <div class="field">
+                                <label>الهاتف</label>
+                                <input id="supplier-phone">
+                            </div>
+
+                            <div class="field">
+                                <label>العنوان</label>
+                                <input id="supplier-address">
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+
+                            <button class="btn success">
+                                حفظ
+                            </button>
+
+                            <button
+                                class="btn secondary"
+                                type="button"
+                                id="cancel-supplier"
+                            >
+                                إلغاء
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        الموردون
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>#</th>
+                                    <th>الاسم</th>
+                                    <th>الهاتف</th>
+                                    <th>العنوان</th>
+                                    <th>الرصيد</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="suppliers-table"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 ACCOUNTS
+            =================================================== -->
+
+            <section class="page" id="page-accounts">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>الحسابات</h2>
+                        <p>الحركة المالية الأساسية</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <span>إجمالي المبيعات</span>
+                        <strong id="account-sales-total">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>إجمالي المشتريات</span>
+                        <strong id="account-purchases-total">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>صافي الحركة</span>
+                        <strong id="account-net-total">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        ملخص الحسابات
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>الحساب</th>
+                                    <th>مدين</th>
+                                    <th>دائن</th>
+                                    <th>الرصيد</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="accounts-table"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 REPORTS
+            =================================================== -->
+
+            <section class="page" id="page-reports">
+
+                <div class="section-head">
+
+                    <div>
+                        <h2>التقارير</h2>
+                        <p>تقارير تشغيلية من البيانات الفعلية المسجلة</p>
+                    </div>
+
+                </div>
+
+
+                <div class="report-grid">
+
+                    <button class="report-card" data-report="sales">
                         🛒
-                    </div>
+                        <strong>تقرير المبيعات</strong>
+                        <span>إجمالي فواتير البيع</span>
+                    </button>
 
-                    <h3>
-                        وحدة المبيعات
-                    </h3>
-
-                    <p>
-                        سيتم بناء شاشة المبيعات والفواتير هنا.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- المشتريات -->
-
-        <section id="purchases"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <div>
-
-                    <h2>
-                        المشتريات
-                    </h2>
-
-                    <p>
-                        إدارة فواتير الشراء والموردين
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    <div class="empty-icon">
+                    <button class="report-card" data-report="purchases">
                         📦
-                    </div>
+                        <strong>تقرير المشتريات</strong>
+                        <span>إجمالي فواتير الشراء</span>
+                    </button>
 
-                    <h3>
-                        وحدة المشتريات
-                    </h3>
-
-                    <p>
-                        سيتم بناء المشتريات هنا.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- الأصناف -->
-
-        <section id="products"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <div>
-
-                    <h2>
-                        الأصناف والأدوية
-                    </h2>
-
-                    <p>
-                        إدارة أصناف وأدوية الصيدلية
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    <div class="empty-icon">
-                        💊
-                    </div>
-
-                    <h3>
-                        الأصناف والأدوية
-                    </h3>
-
-                    <p>
-                        سيتم بناء قاعدة الأصناف والأدوية هنا.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- المخزون -->
-
-        <section id="inventory"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <div>
-
-                    <h2>
-                        المخزون
-                    </h2>
-
-                    <p>
-                        متابعة المخزون والكميات
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    <div class="empty-icon">
+                    <button class="report-card" data-report="stock">
                         🏪
+                        <strong>تقرير المخزون</strong>
+                        <span>قيمة وكميات المخزون</span>
+                    </button>
+
+                    <button class="report-card" data-report="profit">
+                        📈
+                        <strong>ملخص الربحية</strong>
+                        <span>المبيعات ناقص تكلفة الشراء</span>
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title" id="report-title">
+                        اختر تقريرًا
                     </div>
 
-                    <h3>
-                        المخزون
-                    </h3>
-
-                    <p>
-                        سيتم بناء إدارة المخزون هنا.
-                    </p>
+                    <div id="report-content" class="report-content">
+                        لا يوجد تقرير محدد
+                    </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <!-- العملاء -->
+            <!-- ==================================================
+                 SETTINGS
+            =================================================== -->
 
-        <section id="customers"
-                 class="page-section">
+            <section class="page" id="page-settings">
 
-            <div class="page-heading">
+                <div class="section-head">
 
-                <h2>
-                    العملاء
-                </h2>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    👥
-
-                    <h3>
-                        إدارة العملاء
-                    </h3>
+                    <div>
+                        <h2>الإعدادات</h2>
+                        <p>إعدادات المؤسسة والنظام</p>
+                    </div>
 
                 </div>
 
-            </div>
 
-        </section>
+                <div class="panel">
 
-
-        <!-- الموردون -->
-
-        <section id="suppliers"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <h2>
-                    الموردون
-                </h2>
-
-            </div>
+                    <div class="panel-title">
+                        بيانات الصيدلية
+                    </div>
 
 
-            <div class="panel">
+                    <form id="settings-form">
 
-                <div class="empty-state large-empty">
+                        <div class="form-grid">
 
-                    🚚
+                            <div class="field">
+                                <label>اسم الصيدلية</label>
+                                <input id="setting-name">
+                            </div>
 
-                    <h3>
-                        إدارة الموردين
-                    </h3>
+                            <div class="field">
+                                <label>الهاتف</label>
+                                <input id="setting-phone">
+                            </div>
 
-                </div>
+                            <div class="field">
+                                <label>العنوان</label>
+                                <input id="setting-address">
+                            </div>
 
-            </div>
+                            <div class="field">
+                                <label>العملة</label>
+                                <select id="setting-currency">
+                                    <option value="YER">
+                                        ريال يمني
+                                    </option>
+                                    <option value="SAR">
+                                        ريال سعودي
+                                    </option>
+                                    <option value="USD">
+                                        دولار
+                                    </option>
+                                </select>
+                            </div>
 
-        </section>
+                        </div>
 
 
-        <!-- الحسابات -->
+                        <div class="form-actions">
 
-        <section id="accounts"
-                 class="page-section">
+                            <button class="btn success">
+                                حفظ الإعدادات
+                            </button>
 
-            <div class="page-heading">
+                        </div>
 
-                <h2>
-                    الحسابات
-                </h2>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    💰
-
-                    <h3>
-                        النظام المحاسبي
-                    </h3>
+                    </form>
 
                 </div>
 
-            </div>
+            </section>
 
-        </section>
-
-
-        <!-- التقارير -->
-
-        <section id="reports"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <h2>
-                    التقارير
-                </h2>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    📊
-
-                    <h3>
-                        التقارير
-                    </h3>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- الإعدادات -->
-
-        <section id="settings"
-                 class="page-section">
-
-            <div class="page-heading">
-
-                <h2>
-                    الإعدادات
-                </h2>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="empty-state large-empty">
-
-                    ⚙️
-
-                    <h3>
-                        إعدادات النظام
-                    </h3>
-
-                </div>
-
-            </div>
-
-        </section>
+        </div>
 
     </main>
 
 </div>
 
 
-<!-- JavaScript داخل نفس الملف -->
+<!-- ==================================================
+     MODAL
+=================================================== -->
 
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const buttons =
-            document.querySelectorAll(
-                ".menu-item"
-            );
-
-        const sections =
-            document.querySelectorAll(
-                ".page-section"
-            );
-
-        const pageTitle =
-            document.getElementById(
-                "pageTitle"
-            );
+<div class="toast" id="toast"></div>
 
 
-        const titles = {
-
-            dashboard:
-                "لوحة التحكم",
-
-            sales:
-                "المبيعات",
-
-            purchases:
-                "المشتريات",
-
-            products:
-                "الأصناف والأدوية",
-
-            inventory:
-                "المخزون",
-
-            customers:
-                "العملاء",
-
-            suppliers:
-                "الموردون",
-
-            accounts:
-                "الحسابات",
-
-            reports:
-                "التقارير",
-
-            settings:
-                "الإعدادات"
-
-        };
-
-
-        buttons.forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const sectionId =
-                            this.getAttribute(
-                                "data-section"
-                            );
-
-
-                        buttons.forEach(
-                            function (item) {
-
-                                item.classList.remove(
-                                    "active"
-                                );
-
-                            }
-                        );
-
-
-                        this.classList.add(
-                            "active"
-                        );
-
-
-                        sections.forEach(
-                            function (section) {
-
-                                section.classList.remove(
-                                    "active-section"
-                                );
-
-                            }
-                        );
-
-
-                        const selected =
-                            document.getElementById(
-                                sectionId
-                            );
-
-
-                        if (selected) {
-
-                            selected.classList.add(
-                                "active-section"
-                            );
-
-                        }
-
-
-                        if (
-                            pageTitle &&
-                            titles[sectionId]
-                        ) {
-
-                            pageTitle.textContent =
-                                titles[sectionId];
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-    }
-);
-
-</script>
-
+<script src="script.js"></script>
 
 </body>
 
