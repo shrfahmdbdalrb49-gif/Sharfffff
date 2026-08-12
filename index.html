@@ -3,15 +3,149 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>شرف ERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>شرف ERP - نظام إدارة الصيدليات</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>شرف ERP</h1>
+    <div class="app">
 
-    <p>النظام يعمل</p>
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h2>شرف ERP</h2>
+                <span>نظام إدارة الصيدليات</span>
+            </div>
+
+            <nav>
+
+                <button class="menu-item active">
+                    🏠 لوحة التحكم
+                </button>
+
+                <button class="menu-item">
+                    🛒 المبيعات
+                </button>
+
+                <button class="menu-item">
+                    📦 المشتريات
+                </button>
+
+                <button class="menu-item">
+                    💊 الأصناف والأدوية
+                </button>
+
+                <button class="menu-item">
+                    🏪 المخزون
+                </button>
+
+                <button class="menu-item">
+                    👥 العملاء
+                </button>
+
+                <button class="menu-item">
+                    🚚 الموردون
+                </button>
+
+                <button class="menu-item">
+                    💰 الحسابات
+                </button>
+
+                <button class="menu-item">
+                    📊 التقارير
+                </button>
+
+                <button class="menu-item">
+                    ⚙️ الإعدادات
+                </button>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main">
+
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+
+                <div>
+                    <h1>لوحة التحكم</h1>
+                    <p>نظام إدارة الصيدليات</p>
+                </div>
+
+                <div class="user-area">
+                    <span>المدير</span>
+                </div>
+
+            </header>
+
+
+            <!-- محتوى لوحة التحكم -->
+            <section class="dashboard">
+
+                <div class="stat-card">
+                    <span>مبيعات اليوم</span>
+                    <strong>0</strong>
+                    <small>ريال يمني</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>المشتريات اليوم</span>
+                    <strong>0</strong>
+                    <small>ريال يمني</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>عدد الأصناف</span>
+                    <strong>0</strong>
+                    <small>صنف</small>
+                </div>
+
+                <div class="stat-card">
+                    <span>أصناف منخفضة المخزون</span>
+                    <strong>0</strong>
+                    <small>صنف</small>
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>آخر المبيعات</h2>
+                    </div>
+
+                    <div class="empty-state">
+                        لا توجد مبيعات حتى الآن
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>تنبيهات المخزون</h2>
+                    </div>
+
+                    <div class="empty-state">
+                        لا توجد تنبيهات
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
 
     <script src="script.js"></script>
 
