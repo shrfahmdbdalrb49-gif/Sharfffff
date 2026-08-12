@@ -21,56 +21,106 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showPage(sectionId) {
 
-        // إخفاء جميع الشاشات
+        console.log("فتح الشاشة:", sectionId);
+
+        /*
+         * إخفاء جميع الشاشات
+         */
         sections.forEach(function (section) {
             section.classList.remove("active-section");
         });
 
-        // إزالة التحديد من جميع القوائم
+
+        /*
+         * إزالة التحديد من القوائم
+         */
         menuItems.forEach(function (item) {
             item.classList.remove("active");
         });
 
-        // إظهار الشاشة المطلوبة
-        const selectedSection = document.getElementById(sectionId);
+
+        /*
+         * إظهار الشاشة المطلوبة
+         */
+        const selectedSection =
+            document.getElementById(sectionId);
 
         if (selectedSection) {
             selectedSection.classList.add("active-section");
+        } else {
+            console.error(
+                "الشاشة غير موجودة:",
+                sectionId
+            );
         }
 
-        // تحديد القائمة
-        const selectedMenu = document.querySelector(
-             .menu-item[data-section="  + sectionId +  "] 
-        );
+
+        /*
+         * تحديد القائمة الحالية
+         */
+        const selectedMenu =
+            document.querySelector(
+                `.menu-item[data-section="${sectionId}"]`
+            );
 
         if (selectedMenu) {
             selectedMenu.classList.add("active");
         }
 
-        // تغيير عنوان الصفحة
-        if (pageTitle && pageTitles[sectionId]) {
-            pageTitle.textContent = pageTitles[sectionId];
+
+        /*
+         * تغيير عنوان الصفحة
+         */
+        if (
+            pageTitle &&
+            pageTitles[sectionId]
+        ) {
+            pageTitle.textContent =
+                pageTitles[sectionId];
         }
 
-        console.log("تم فتح:", sectionId);
+
+        /*
+         * إذا فتحنا الحسابات،
+         * نبني شاشة شجرة الحسابات
+         */
+        if (
+            sectionId === "accounts" &&
+            typeof buildAccountsPage === "function"
+        ) {
+            buildAccountsPage();
+        }
+
     }
 
-    // تشغيل القوائم
+
+    /*
+     * تشغيل جميع أزرار القائمة
+     */
     menuItems.forEach(function (button) {
 
-        button.addEventListener("click", function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-            const sectionId = this.getAttribute("data-section");
+                const sectionId =
+                    this.getAttribute(
+                        "data-section"
+                    );
 
-            if (sectionId) {
-                showPage(sectionId);
+                if (sectionId) {
+                    showPage(sectionId);
+                }
+
             }
-
-        });
+        );
 
     });
 
-    // فتح لوحة التحكم عند تشغيل النظام
+
+    /*
+     * تشغيل لوحة التحكم عند فتح النظام
+     */
     showPage("dashboard");
 
 });
