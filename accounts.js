@@ -5,11 +5,10 @@
 
 
 /* =========================================================
-   التخزين
+   التخزين المستقل للحسابات
 ========================================================= */
 
-const ACCOUNTS_STORAGE_KEY =
-    "sharaf_erp_accounts_v1";
+const ACCOUNTS_STORAGE_KEY = "sharaf_erp_accounts_v1";
 
 
 /* =========================================================
@@ -26,9 +25,7 @@ const ACCOUNT_TYPES = {
 
 
 /* =========================================================
-   الشجرة الافتراضية
-   ملاحظة:
-   هذه البيانات تُنشأ مرة واحدة فقط عند عدم وجود بيانات.
+   الحسابات الافتراضية
 ========================================================= */
 
 const DEFAULT_ACCOUNTS = [
@@ -284,10 +281,12 @@ function loadAccounts() {
                     account => ({ ...account })
                 );
 
+
             localStorage.setItem(
                 ACCOUNTS_STORAGE_KEY,
                 JSON.stringify(initial)
             );
+
 
             return initial;
         }
@@ -315,9 +314,20 @@ function loadAccounts() {
             error
         );
 
-        return DEFAULT_ACCOUNTS.map(
-            account => ({ ...account })
+
+        const fallback =
+            DEFAULT_ACCOUNTS.map(
+                account => ({ ...account })
+            );
+
+
+        localStorage.setItem(
+            ACCOUNTS_STORAGE_KEY,
+            JSON.stringify(fallback)
         );
+
+
+        return fallback;
 
     }
 
@@ -339,7 +349,7 @@ function saveAccounts() {
 
 
 /* =========================================================
-   أدوات
+   أدوات الحسابات
 ========================================================= */
 
 function getAccountTypeName(type) {
@@ -378,6 +388,10 @@ function accountHasChildren(id) {
 }
 
 
+/* =========================================================
+   حماية النصوص
+========================================================= */
+
 function escapeHTML(value) {
 
     return String(value ?? "")
@@ -412,6 +426,7 @@ function showAccountMessage(
 
     message.textContent = text;
 
+
     message.className =
         `message show ${type}`;
 
@@ -430,7 +445,7 @@ function showAccountMessage(
 
 
 /* =========================================================
-   فتح وإغلاق نموذج الحساب
+   نموذج الحساب
 ========================================================= */
 
 function openAccountForm(
@@ -456,6 +471,17 @@ function openAccountForm(
         );
 
 
+    if (!box || !title || !form) {
+
+        console.error(
+            "واجهة نموذج الحساب غير موجودة."
+        );
+
+        return;
+
+    }
+
+
     form.reset();
 
 
@@ -476,7 +502,14 @@ function openAccountForm(
 
 
         if (!account) {
+
+            showAccountMessage(
+                "الحساب غير موجود.",
+                "error"
+            );
+
             return;
+
         }
 
 
@@ -539,17 +572,31 @@ function closeAccountForm() {
         );
 
 
-    box.classList.remove("show");
+    const form =
+        document.getElementById(
+            "accountForm"
+        );
 
 
-    document.getElementById(
-        "accountForm"
-    ).reset();
+    if (box) {
+        box.classList.remove("show");
+    }
 
 
-    document.getElementById(
-        "editAccountId"
-    ).value = "";
+    if (form) {
+        form.reset();
+    }
+
+
+    const editId =
+        document.getElementById(
+            "editAccountId"
+        );
+
+
+    if (editId) {
+        editId.value = "";
+    }
 
 }
 
@@ -574,11 +621,15 @@ function fillParentSelect(
 
 
     const groups =
-        accounts.filter(
-            account =>
-                account.isGroup &&
-                account.active
-        );
+        accounts
+            .filter(
+                account =>
+                    account.isGroup &&
+                    account.active
+            )
+            .sort(
+                compareAccountCodes
+            );
 
 
     select.innerHTML = `
@@ -589,16 +640,6 @@ function fillParentSelect(
 
         ${
             groups
-                .sort(
-                    (a, b) =>
-                        a.code.localeCompare(
-                            b.code,
-                            undefined,
-                            {
-                                numeric: true
-                            }
-                        )
-                )
                 .map(
                     account => `
                         <option
@@ -625,12 +666,10 @@ function fillParentSelect(
 
 
 /* =========================================================
-   حفظ حساب جديد أو تعديل حساب
+   إنشاء / تعديل الحساب
 ========================================================= */
 
-function handleAccountSubmit(
-    event
-) {
+function handleAccountSubmit(event) {
 
     event.preventDefault();
 
@@ -697,8 +736,6 @@ function handleAccountSubmit(
     }
 
 
-    /* منع تكرار الكود */
-
     const duplicate =
         accounts.find(
             account =>
@@ -721,15 +758,13 @@ function handleAccountSubmit(
 
 
     /* =====================================================
-       تعديل حساب
+       تعديل
     ===================================================== */
 
     if (editId) {
 
         const account =
-            getAccountById(
-                editId
-            );
+            getAccountById(editId);
 
 
         if (!account) {
@@ -743,10 +778,6 @@ function handleAccountSubmit(
 
         }
 
-
-        /*
-           لا نسمح بجعل الحساب أبًا لنفسه.
-        */
 
         if (
             parentId !== null &&
@@ -763,10 +794,6 @@ function handleAccountSubmit(
 
         }
 
-
-        /*
-           لا نسمح بنقل الحساب تحت أحد أبنائه.
-        */
 
         if (
             parentId !== null &&
@@ -794,11 +821,26 @@ function handleAccountSubmit(
 
         if (
             parent &&
+            !parent.isGroup
+        ) {
+
+            showAccountMessage(
+                "الحساب الأب يجب أن يكون حسابًا تجميعيًا.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            parent &&
             parent.type !== type
         ) {
 
             showAccountMessage(
-                "نوع الحساب يجب أن يتوافق مع نوع الحساب الأب.",
+                "نوع الحساب يجب أن يتوافق مع الحساب الأب.",
                 "error"
             );
 
@@ -820,9 +862,16 @@ function handleAccountSubmit(
             parentId;
 
 
+        if (parent) {
+            parent.isGroup = true;
+        }
+
+
         saveAccounts();
 
+
         renderAccounts();
+
 
         closeAccountForm();
 
@@ -839,7 +888,7 @@ function handleAccountSubmit(
 
 
     /* =====================================================
-       إضافة حساب
+       إضافة جديد
     ===================================================== */
 
     const parent =
@@ -884,7 +933,7 @@ function handleAccountSubmit(
     ) {
 
         showAccountMessage(
-            "نوع الحساب يجب أن يتوافق مع نوع الحساب الأب.",
+            "نوع الحساب يجب أن يتوافق مع الحساب الأب.",
             "error"
         );
 
@@ -892,11 +941,6 @@ function handleAccountSubmit(
 
     }
 
-
-    /*
-       إذا لم يوجد أب فهو حساب رئيسي
-       وإذا وجد أب فهو حساب فرعي
-    */
 
     const newAccount = {
 
@@ -910,12 +954,6 @@ function handleAccountSubmit(
         type,
 
         parentId,
-
-        /*
-           الحساب الذي لا يوجد له أبناء يمكن أن يكون
-           حساب حركة، لكن المستخدم يستطيع لاحقًا
-           تحويله إلى مجموعة عندما نحتاج ذلك.
-        */
 
         isGroup:
             false,
@@ -931,20 +969,22 @@ function handleAccountSubmit(
     );
 
 
-    /*
-       إذا أصبح للحساب أبناء، يتحول إلى مجموعة.
-    */
-
     if (parent) {
 
-        parent.isGroup = true;
+        parent.isGroup =
+            true;
 
     }
 
 
     saveAccounts();
 
+
     renderAccounts();
+
+
+    fillParentSelect();
+
 
     closeAccountForm();
 
@@ -958,7 +998,7 @@ function handleAccountSubmit(
 
 
 /* =========================================================
-   التحقق من علاقة الأب والابن
+   فحص علاقة الأب والابن
 ========================================================= */
 
 function isDescendant(
@@ -984,6 +1024,15 @@ function isDescendant(
         }
 
 
+        if (
+            current.parentId === null
+        ) {
+
+            break;
+
+        }
+
+
         current =
             getAccountById(
                 current.parentId
@@ -998,12 +1047,10 @@ function isDescendant(
 
 
 /* =========================================================
-   تغيير حالة الحساب
+   تفعيل / تعطيل
 ========================================================= */
 
-function toggleAccount(
-    id
-) {
+function toggleAccount(id) {
 
     const account =
         getAccountById(id);
@@ -1013,10 +1060,6 @@ function toggleAccount(
         return;
     }
 
-
-    /*
-       لا نعطل حساب مجموعة إذا كان تحته حسابات نشطة.
-    */
 
     if (
         account.active &&
@@ -1031,10 +1074,10 @@ function toggleAccount(
                 );
 
 
-        if (activeChildren.length) {
+        if (activeChildren.length > 0) {
 
             showAccountMessage(
-                "لا يمكن تعطيل هذا الحساب قبل تعطيل حساباته الفرعية.",
+                "لا يمكن تعطيل الحساب قبل تعطيل حساباته الفرعية.",
                 "error"
             );
 
@@ -1051,6 +1094,7 @@ function toggleAccount(
 
     saveAccounts();
 
+
     renderAccounts();
 
 
@@ -1065,12 +1109,10 @@ function toggleAccount(
 
 
 /* =========================================================
-   حذف الحساب
+   حذف
 ========================================================= */
 
-function deleteAccount(
-    id
-) {
+function deleteAccount(id) {
 
     const account =
         getAccountById(id);
@@ -1080,10 +1122,6 @@ function deleteAccount(
         return;
     }
 
-
-    /*
-       لا نسمح بالحذف إذا كان له أبناء.
-    */
 
     if (
         accountHasChildren(id)
@@ -1099,14 +1137,8 @@ function deleteAccount(
     }
 
 
-    /*
-       في النسخة الحالية لا توجد قيود بعد،
-       لذلك الحذف مسموح لحساب حركة غير مستخدم.
-       بعد بناء القيود سيتم منع الحذف إذا كان له حركات.
-    */
-
     const confirmed =
-        confirm(
+        window.confirm(
             `هل تريد حذف الحساب "${account.name}"؟`
         );
 
@@ -1126,7 +1158,9 @@ function deleteAccount(
 
     saveAccounts();
 
+
     renderAccounts();
+
 
     fillParentSelect();
 
@@ -1140,283 +1174,21 @@ function deleteAccount(
 
 
 /* =========================================================
-   عرض الشجرة
+   ترتيب الشجرة
 ========================================================= */
 
-function renderAccounts() {
-
-    const tbody =
-        document.getElementById(
-            "accountsTableBody"
-        );
-
-
-    if (!tbody) {
-        return;
-    }
-
-
-    const search =
-        document.getElementById(
-            "accountSearch"
-        )?.value
-            .trim()
-            .toLowerCase()
-            || "";
-
-
-    let visibleAccounts;
-
-
-    if (search) {
-
-        visibleAccounts =
-            accounts.filter(
-                account =>
-                    account.code
-                        .toLowerCase()
-                        .includes(search) ||
-                    account.name
-                        .toLowerCase()
-                        .includes(search)
-            );
-
-    } else {
-
-        visibleAccounts =
-            getTreeOrder();
-
-    }
-
-
-    if (!visibleAccounts.length) {
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="6"
-                    class="empty-row"
-                >
-                    لا توجد حسابات
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    tbody.innerHTML =
-        visibleAccounts
-            .map(
-                account => {
-
-                    const parent =
-                        account.parentId !== null
-                            ? getAccountById(
-                                account.parentId
-                            )
-                            : null;
-
-
-                    const level =
-                        getAccountLevel(
-                            account
-                        );
-
-
-                    const statusClass =
-                        account.active
-                            ? "status-active"
-                            : "status-inactive";
-
-
-                    const statusText =
-                        account.active
-                            ? "فعال"
-                            : "معطل";
-
-
-                    const children =
-                        accountHasChildren(
-                            account.id
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td
-                                class="account-level-${Math.min(
-                                    level,
-                                    3
-                                )}"
-                            >
-
-                                ${
-                                    account.isGroup
-                                        ? "📁"
-                                        : "📄"
-                                }
-
-                                <strong>
-                                    ${escapeHTML(
-                                        account.code
-                                    )}
-                                </strong>
-
-                            </td>
-
-
-                            <td
-                                class="account-level-${Math.min(
-                                    level,
-                                    3
-                                )}"
-                            >
-
-                                ${
-                                    escapeHTML(
-                                        account.name
-                                    )
-                                }
-
-                            </td>
-
-
-                            <td>
-
-                                ${
-                                    getAccountTypeName(
-                                        account.type
-                                    )
-                                }
-
-                            </td>
-
-
-                            <td>
-
-                                ${
-                                    parent
-                                        ? `
-                                            ${escapeHTML(
-                                                parent.code
-                                            )}
-                                            -
-                                            ${escapeHTML(
-                                                parent.name
-                                            )}
-                                        `
-                                        : "رئيسي"
-                                }
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    class="status ${
-                                        statusClass
-                                    }"
-                                >
-                                    ${statusText}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-                                    ${
-                                        account.active
-                                            ? `
-                                                <button
-                                                    class="edit-btn"
-                                                    data-action="edit"
-                                                    data-id="${account.id}"
-                                                >
-                                                    تعديل
-                                                </button>
-                                            `
-                                            : ""
-                                    }
-
-
-                                    ${
-                                        account.isGroup &&
-                                        account.active
-                                            ? `
-                                                <button
-                                                    class="edit-btn"
-                                                    data-action="add-child"
-                                                    data-id="${account.id}"
-                                                >
-                                                    + فرعي
-                                                </button>
-                                            `
-                                            : ""
-                                    }
-
-
-                                    <button
-                                        class="cancel-btn"
-                                        style="padding:7px 10px;font-size:12px;"
-                                        data-action="toggle"
-                                        data-id="${account.id}"
-                                    >
-                                        ${
-                                            account.active
-                                                ? "تعطيل"
-                                                : "تفعيل"
-                                        }
-                                    </button>
-
-
-                                    ${
-                                        !children
-                                            ? `
-                                                <button
-                                                    class="danger-btn"
-                                                    data-action="delete"
-                                                    data-id="${account.id}"
-                                                >
-                                                    حذف
-                                                </button>
-                                            `
-                                            : ""
-                                    }
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    fillParentSelect();
+function compareAccountCodes(a, b) {
+
+    return a.code.localeCompare(
+        b.code,
+        undefined,
+        {
+            numeric: true
+        }
+    );
 
 }
 
-
-/* =========================================================
-   ترتيب الحسابات كشجرة
-========================================================= */
 
 function getTreeOrder() {
 
@@ -1482,52 +1254,316 @@ function getTreeOrder() {
 }
 
 
-function compareAccountCodes(
-    a,
-    b
-) {
-
-    return a.code.localeCompare(
-        b.code,
-        undefined,
-        {
-            numeric: true
-        }
-    );
-
-}
-
-
-function getAccountLevel(
-    account
-) {
+function getAccountLevel(account) {
 
     let level = 1;
 
-    let current =
-        account;
+    let current = account;
 
 
     while (
+        current &&
         current.parentId !== null
     ) {
 
         level++;
+
 
         current =
             getAccountById(
                 current.parentId
             );
 
-
-        if (!current) {
-            break;
-        }
-
     }
 
 
     return level;
+
+}
+
+
+/* =========================================================
+   عرض الحسابات
+========================================================= */
+
+function renderAccounts() {
+
+    const tbody =
+        document.getElementById(
+            "accountsTableBody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    const searchInput =
+        document.getElementById(
+            "accountSearch"
+        );
+
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    let visibleAccounts;
+
+
+    if (search) {
+
+        visibleAccounts =
+            accounts
+                .filter(
+                    account =>
+                        account.code
+                            .toLowerCase()
+                            .includes(search) ||
+                        account.name
+                            .toLowerCase()
+                            .includes(search)
+                )
+                .sort(
+                    compareAccountCodes
+                );
+
+    } else {
+
+        visibleAccounts =
+            getTreeOrder();
+
+    }
+
+
+    if (!visibleAccounts.length) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-row"
+                >
+                    لا توجد حسابات
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        visibleAccounts
+            .map(
+                account => {
+
+                    const parent =
+                        account.parentId !== null
+                            ? getAccountById(
+                                account.parentId
+                            )
+                            : null;
+
+
+                    const level =
+                        account.treeLevel ||
+                        getAccountLevel(
+                            account
+                        );
+
+
+                    const statusClass =
+                        account.active
+                            ? "status-active"
+                            : "status-inactive";
+
+
+                    const statusText =
+                        account.active
+                            ? "فعال"
+                            : "معطل";
+
+
+                    const children =
+                        accountHasChildren(
+                            account.id
+                        );
+
+
+                    const indent =
+                        Math.max(
+                            0,
+                            level - 1
+                        ) * 25;
+
+
+                    return `
+
+                        <tr>
+
+                            <td
+                                style="padding-right:${12 + indent}px"
+                            >
+
+                                ${
+                                    account.isGroup
+                                        ? "📁"
+                                        : "📄"
+                                }
+
+                                <strong>
+                                    ${escapeHTML(
+                                        account.code
+                                    )}
+                                </strong>
+
+                            </td>
+
+
+                            <td
+                                style="padding-right:${12 + indent}px"
+                            >
+
+                                ${escapeHTML(
+                                    account.name
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHTML(
+                                    getAccountTypeName(
+                                        account.type
+                                    )
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ${
+                                    parent
+                                        ? `
+                                            ${escapeHTML(
+                                                parent.code
+                                            )}
+                                            -
+                                            ${escapeHTML(
+                                                parent.name
+                                            )}
+                                        `
+                                        : "رئيسي"
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="status ${statusClass}"
+                                >
+                                    ${statusText}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    ${
+                                        account.active
+                                            ? `
+                                                <button
+                                                    type="button"
+                                                    class="edit-btn"
+                                                    data-action="edit"
+                                                    data-id="${account.id}"
+                                                >
+                                                    تعديل
+                                                </button>
+                                            `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        account.isGroup &&
+                                        account.active
+                                            ? `
+                                                <button
+                                                    type="button"
+                                                    class="edit-btn"
+                                                    data-action="add-child"
+                                                    data-id="${account.id}"
+                                                >
+                                                    + فرعي
+                                                </button>
+                                            `
+                                            : ""
+                                    }
+
+
+                                    <button
+                                        type="button"
+                                        class="cancel-btn"
+                                        style="padding:7px 10px;font-size:12px;"
+                                        data-action="toggle"
+                                        data-id="${account.id}"
+                                    >
+                                        ${
+                                            account.active
+                                                ? "تعطيل"
+                                                : "تفعيل"
+                                        }
+                                    </button>
+
+
+                                    ${
+                                        !children
+                                            ? `
+                                                <button
+                                                    type="button"
+                                                    class="danger-btn"
+                                                    data-action="delete"
+                                                    data-id="${account.id}"
+                                                >
+                                                    حذف
+                                                </button>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    fillParentSelect();
 
 }
 
@@ -1544,8 +1580,38 @@ function setupAccountEvents() {
         );
 
 
-    if (!addButton) {
+    const cancelButton =
+        document.getElementById(
+            "cancelAccount"
+        );
+
+
+    const form =
+        document.getElementById(
+            "accountForm"
+        );
+
+
+    const search =
+        document.getElementById(
+            "accountSearch"
+        );
+
+
+    const table =
+        document.getElementById(
+            "accountsTableBody"
+        );
+
+
+    if (!addButton || !cancelButton || !form || !search || !table) {
+
+        console.warn(
+            "لم يتم العثور على كل عناصر شاشة الحسابات."
+        );
+
         return;
+
     }
 
 
@@ -1559,100 +1625,98 @@ function setupAccountEvents() {
     );
 
 
-    document
-        .getElementById(
-            "cancelAccount"
-        )
-        .addEventListener(
-            "click",
-            closeAccountForm
-        );
+    cancelButton.addEventListener(
+        "click",
+        function () {
+
+            closeAccountForm();
+
+        }
+    );
 
 
-    document
-        .getElementById(
-            "accountForm"
-        )
-        .addEventListener(
-            "submit",
-            handleAccountSubmit
-        );
+    form.addEventListener(
+        "submit",
+        handleAccountSubmit
+    );
 
 
-    document
-        .getElementById(
-            "accountSearch"
-        )
-        .addEventListener(
-            "input",
-            renderAccounts
-        );
+    search.addEventListener(
+        "input",
+        function () {
+
+            renderAccounts();
+
+        }
+    );
 
 
-    document
-        .getElementById(
-            "accountsTableBody"
-        )
-        .addEventListener(
-            "click",
-            function (event) {
+    table.addEventListener(
+        "click",
+        function (event) {
 
-                const button =
-                    event.target.closest(
-                        "button"
-                    );
+            const button =
+                event.target.closest(
+                    "button[data-action]"
+                );
 
 
-                if (!button) {
-                    return;
-                }
+            if (!button) {
+                return;
+            }
 
 
-                const action =
-                    button.dataset.action;
+            const action =
+                button.dataset.action;
 
 
-                const id =
-                    button.dataset.id;
+            const id =
+                button.dataset.id;
 
 
-                if (action === "edit") {
+            if (action === "edit") {
 
-                    openAccountForm(
-                        null,
-                        id
-                    );
+                openAccountForm(
+                    null,
+                    id
+                );
 
-                }
-
-
-                if (
-                    action === "add-child"
-                ) {
-
-                    openAccountForm(
-                        id,
-                        null
-                    );
-
-                }
-
-
-                if (action === "toggle") {
-
-                    toggleAccount(id);
-
-                }
-
-
-                if (action === "delete") {
-
-                    deleteAccount(id);
-
-                }
+                return;
 
             }
-        );
+
+
+            if (
+                action === "add-child"
+            ) {
+
+                openAccountForm(
+                    id,
+                    null
+                );
+
+                return;
+
+            }
+
+
+            if (action === "toggle") {
+
+                toggleAccount(id);
+
+                return;
+
+            }
+
+
+            if (action === "delete") {
+
+                deleteAccount(id);
+
+            }
+
+        }
+    );
 
 }
 
@@ -1670,14 +1734,12 @@ function initializeAccounts() {
 }
 
 
-/*
-   مهم:
-   accounts.js يتم تحميله بعد script.js.
-*/
+/* =========================================================
+   بدء الملف
+========================================================= */
 
 if (
-    document.readyState ===
-    "loading"
+    document.readyState === "loading"
 ) {
 
     document.addEventListener(
