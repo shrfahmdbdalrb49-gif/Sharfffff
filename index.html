@@ -2,79 +2,126 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>شرف ERP - نظام إدارة الصيدليات</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- =========================
-         القائمة الجانبية
-    ========================== -->
+    <!-- القائمة الجانبية -->
 
     <aside class="sidebar">
 
         <div class="logo">
+
             <h2>شرف ERP</h2>
-            <span>نظام إدارة الصيدليات</span>
+
+            <span>
+                نظام إدارة الصيدليات
+            </span>
+
         </div>
+
 
         <nav>
 
-            <button class="menu-item active" data-section="dashboard">
+            <button class="menu-item active"
+                    data-section="dashboard">
+
                 🏠
                 <span>لوحة التحكم</span>
+
             </button>
 
-            <button class="menu-item" data-section="sales">
+
+            <button class="menu-item"
+                    data-section="sales">
+
                 🛒
                 <span>المبيعات</span>
+
             </button>
 
-            <button class="menu-item" data-section="purchases">
+
+            <button class="menu-item"
+                    data-section="purchases">
+
                 📦
                 <span>المشتريات</span>
+
             </button>
 
-            <button class="menu-item" data-section="products">
+
+            <button class="menu-item"
+                    data-section="products">
+
                 💊
                 <span>الأصناف والأدوية</span>
+
             </button>
 
-            <button class="menu-item" data-section="inventory">
+
+            <button class="menu-item"
+                    data-section="inventory">
+
                 🏪
                 <span>المخزون</span>
+
             </button>
 
-            <button class="menu-item" data-section="customers">
+
+            <button class="menu-item"
+                    data-section="customers">
+
                 👥
                 <span>العملاء</span>
+
             </button>
 
-            <button class="menu-item" data-section="suppliers">
+
+            <button class="menu-item"
+                    data-section="suppliers">
+
                 🚚
                 <span>الموردون</span>
+
             </button>
 
-            <button class="menu-item" data-section="accounts">
+
+            <button class="menu-item"
+                    data-section="accounts">
+
                 💰
                 <span>الحسابات</span>
+
             </button>
 
-            <button class="menu-item" data-section="reports">
+
+            <button class="menu-item"
+                    data-section="reports">
+
                 📊
                 <span>التقارير</span>
+
             </button>
 
-            <button class="menu-item" data-section="settings">
+
+            <button class="menu-item"
+                    data-section="settings">
+
                 ⚙️
                 <span>الإعدادات</span>
+
             </button>
 
         </nav>
@@ -82,13 +129,9 @@
     </aside>
 
 
-    <!-- =========================
-         المحتوى الرئيسي
-    ========================== -->
+    <!-- المحتوى -->
 
     <main class="main">
-
-        <!-- الشريط العلوي -->
 
         <header class="topbar">
 
@@ -98,33 +141,39 @@
                     لوحة التحكم
                 </h1>
 
-                <p id="pageDescription">
-                    نظرة عامة على عمليات الصيدلية
+                <p>
+                    نظام إدارة الصيدليات
                 </p>
 
             </div>
 
+
             <div class="user-area">
-                <span>المدير</span>
+
+                المدير
+
             </div>
 
         </header>
 
 
-        <!-- =========================
-             لوحة التحكم
-        ========================== -->
+        <!-- لوحة التحكم -->
 
-        <section
-            id="dashboard"
-            class="page-section active-section"
-        >
+        <section id="dashboard"
+                 class="page-section active-section">
 
             <div class="page-heading">
 
                 <div>
-                    <h2>لوحة التحكم</h2>
-                    <p>ملخص العمليات الحالية</p>
+
+                    <h2>
+                        لوحة التحكم
+                    </h2>
+
+                    <p>
+                        نظرة عامة على عمليات الصيدلية
+                    </p>
+
                 </div>
 
             </div>
@@ -134,52 +183,68 @@
 
                 <div class="stat-card">
 
-                    <span>مبيعات اليوم</span>
+                    <span>
+                        مبيعات اليوم
+                    </span>
 
-                    <strong id="todaySales">
+                    <strong>
                         0
                     </strong>
 
-                    <small>ريال يمني</small>
+                    <small>
+                        ريال يمني
+                    </small>
 
                 </div>
 
 
                 <div class="stat-card">
 
-                    <span>مشتريات اليوم</span>
+                    <span>
+                        مشتريات اليوم
+                    </span>
 
-                    <strong id="todayPurchases">
+                    <strong>
                         0
                     </strong>
 
-                    <small>ريال يمني</small>
+                    <small>
+                        ريال يمني
+                    </small>
 
                 </div>
 
 
                 <div class="stat-card">
 
-                    <span>عدد الأصناف</span>
+                    <span>
+                        عدد الأصناف
+                    </span>
 
-                    <strong id="productCount">
+                    <strong>
                         0
                     </strong>
 
-                    <small>صنف</small>
+                    <small>
+                        صنف
+                    </small>
 
                 </div>
 
 
-                <div class="stat-card warning-card">
+                <div class="stat-card">
 
-                    <span>منخفض المخزون</span>
+                    <span>
+                        منخفض المخزون
+                    </span>
 
-                    <strong id="lowStockCount">
+                    <strong>
                         0
                     </strong>
 
-                    <small>صنف</small>
+                    <small>
+                        صنف
+                    </small>
 
                 </div>
 
@@ -187,14 +252,17 @@
                 <div class="panel dashboard-panel">
 
                     <div class="panel-header">
-                        <h2>آخر المبيعات</h2>
+
+                        <h2>
+                            آخر المبيعات
+                        </h2>
+
                     </div>
 
-                    <div
-                        id="recentSales"
-                        class="empty-state"
-                    >
+                    <div class="empty-state">
+
                         لا توجد مبيعات حتى الآن
+
                     </div>
 
                 </div>
@@ -203,14 +271,17 @@
                 <div class="panel dashboard-panel">
 
                     <div class="panel-header">
-                        <h2>تنبيهات المخزون</h2>
+
+                        <h2>
+                            تنبيهات المخزون
+                        </h2>
+
                     </div>
 
-                    <div
-                        id="stockAlerts"
-                        class="empty-state"
-                    >
+                    <div class="empty-state">
+
                         لا توجد تنبيهات
+
                     </div>
 
                 </div>
@@ -220,25 +291,24 @@
         </section>
 
 
-        <!-- =========================
-             المبيعات
-        ========================== -->
+        <!-- المبيعات -->
 
-        <section
-            id="sales"
-            class="page-section"
-        >
+        <section id="sales"
+                 class="page-section">
 
             <div class="page-heading">
 
                 <div>
-                    <h2>المبيعات</h2>
-                    <p>إدارة فواتير مبيعات الصيدلية</p>
-                </div>
 
-                <button class="primary-button">
-                    + فاتورة بيع جديدة
-                </button>
+                    <h2>
+                        المبيعات
+                    </h2>
+
+                    <p>
+                        إدارة فواتير مبيعات الصيدلية
+                    </p>
+
+                </div>
 
             </div>
 
@@ -256,7 +326,7 @@
                     </h3>
 
                     <p>
-                        سيتم بناء شاشة فاتورة البيع وربطها بالأصناف والمخزون والحسابات.
+                        سيتم بناء شاشة المبيعات والفواتير هنا.
                     </p>
 
                 </div>
@@ -266,25 +336,24 @@
         </section>
 
 
-        <!-- =========================
-             المشتريات
-        ========================== -->
+        <!-- المشتريات -->
 
-        <section
-            id="purchases"
-            class="page-section"
-        >
+        <section id="purchases"
+                 class="page-section">
 
             <div class="page-heading">
 
                 <div>
-                    <h2>المشتريات</h2>
-                    <p>إدارة فواتير الشراء والموردين</p>
-                </div>
 
-                <button class="primary-button">
-                    + فاتورة شراء جديدة
-                </button>
+                    <h2>
+                        المشتريات
+                    </h2>
+
+                    <p>
+                        إدارة فواتير الشراء والموردين
+                    </p>
+
+                </div>
 
             </div>
 
@@ -302,7 +371,7 @@
                     </h3>
 
                     <p>
-                        سيتم ربط المشتريات بالمخزون والموردين والحسابات.
+                        سيتم بناء المشتريات هنا.
                     </p>
 
                 </div>
@@ -312,391 +381,68 @@
         </section>
 
 
-        <!-- =========================
-             الأصناف والأدوية
-        ========================== -->
+        <!-- الأصناف -->
 
-        <section
-            id="products"
-            class="page-section"
-        >
+        <section id="products"
+                 class="page-section">
 
             <div class="page-heading">
 
                 <div>
-
-                    <h2>الأصناف والأدوية</h2>
-
-                    <p>
-                        إضافة وإدارة أصناف الصيدلية
-                    </p>
-
-                </div>
-
-                <button
-                    class="primary-button"
-                    id="openProductForm"
-                >
-                    + إضافة صنف
-                </button>
-
-            </div>
-
-
-            <!-- نموذج إضافة صنف -->
-
-            <div
-                id="productFormPanel"
-                class="panel form-panel hidden"
-            >
-
-                <div class="panel-header">
 
                     <h2>
-                        إضافة صنف جديد
+                        الأصناف والأدوية
                     </h2>
 
+                    <p>
+                        إدارة أصناف وأدوية الصيدلية
+                    </p>
+
                 </div>
-
-
-                <form id="productForm">
-
-                    <div class="form-grid">
-
-                        <div class="form-group">
-
-                            <label>
-                                اسم الصنف
-                            </label>
-
-                            <input
-                                type="text"
-                                id="productName"
-                                placeholder="مثال: باراسيتامول"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                الباركود
-                            </label>
-
-                            <input
-                                type="text"
-                                id="productBarcode"
-                                placeholder="باركود الصنف"
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                التصنيف
-                            </label>
-
-                            <input
-                                type="text"
-                                id="productCategory"
-                                placeholder="مثال: مسكنات"
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                الوحدة
-                            </label>
-
-                            <select id="productUnit">
-
-                                <option value="علبة">
-                                    علبة
-                                </option>
-
-                                <option value="شريط">
-                                    شريط
-                                </option>
-
-                                <option value="قطعة">
-                                    قطعة
-                                </option>
-
-                                <option value="زجاجة">
-                                    زجاجة
-                                </option>
-
-                                <option value="عبوة">
-                                    عبوة
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                سعر الشراء
-                            </label>
-
-                            <input
-                                type="number"
-                                id="purchasePrice"
-                                min="0"
-                                step="0.01"
-                                value="0"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                سعر البيع
-                            </label>
-
-                            <input
-                                type="number"
-                                id="salePrice"
-                                min="0"
-                                step="0.01"
-                                value="0"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                الكمية الحالية
-                            </label>
-
-                            <input
-                                type="number"
-                                id="productQuantity"
-                                min="0"
-                                step="1"
-                                value="0"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                حد إعادة الطلب
-                            </label>
-
-                            <input
-                                type="number"
-                                id="minimumStock"
-                                min="0"
-                                step="1"
-                                value="5"
-                                required
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-actions">
-
-                        <button
-                            type="submit"
-                            class="primary-button"
-                        >
-                            حفظ الصنف
-                        </button>
-
-                        <button
-                            type="button"
-                            id="cancelProductForm"
-                            class="secondary-button"
-                        >
-                            إلغاء
-                        </button>
-
-                    </div>
-
-                </form>
 
             </div>
 
 
-            <!-- بحث الأصناف -->
-
             <div class="panel">
 
-                <div class="panel-header product-toolbar">
+                <div class="empty-state large-empty">
+
+                    <div class="empty-icon">
+                        💊
+                    </div>
+
+                    <h3>
+                        الأصناف والأدوية
+                    </h3>
+
+                    <p>
+                        سيتم بناء قاعدة الأصناف والأدوية هنا.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- المخزون -->
+
+        <section id="inventory"
+                 class="page-section">
+
+            <div class="page-heading">
+
+                <div>
 
                     <h2>
-                        قائمة الأصناف
+                        المخزون
                     </h2>
 
-                    <input
-                        type="search"
-                        id="productSearch"
-                        class="search-input"
-                        placeholder="ابحث بالاسم أو الباركود..."
-                    >
+                    <p>
+                        متابعة المخزون والكميات
+                    </p>
 
-                </div>
-
-
-                <div class="table-container">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    #
-                                </th>
-
-                                <th>
-                                    الباركود
-                                </th>
-
-                                <th>
-                                    اسم الصنف
-                                </th>
-
-                                <th>
-                                    التصنيف
-                                </th>
-
-                                <th>
-                                    الكمية
-                                </th>
-
-                                <th>
-                                    سعر البيع
-                                </th>
-
-                                <th>
-                                    الحالة
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="productsTableBody">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             المخزون
-        ========================== -->
-
-        <section
-            id="inventory"
-            class="page-section"
-        >
-
-            <div class="page-heading">
-
-                <div>
-                    <h2>المخزون</h2>
-                    <p>متابعة كميات الأصناف وحالة المخزون</p>
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="table-container">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    الصنف
-                                </th>
-
-                                <th>
-                                    الباركود
-                                </th>
-
-                                <th>
-                                    الكمية
-                                </th>
-
-                                <th>
-                                    الحد الأدنى
-                                </th>
-
-                                <th>
-                                    الحالة
-                                </th>
-
-                                <th>
-                                    قيمة المخزون
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="inventoryTableBody">
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             العملاء
-        ========================== -->
-
-        <section
-            id="customers"
-            class="page-section"
-        >
-
-            <div class="page-heading">
-
-                <div>
-                    <h2>العملاء</h2>
-                    <p>إدارة العملاء والحسابات المدينة</p>
                 </div>
 
             </div>
@@ -707,15 +453,15 @@
                 <div class="empty-state large-empty">
 
                     <div class="empty-icon">
-                        👥
+                        🏪
                     </div>
 
                     <h3>
-                        وحدة العملاء
+                        المخزون
                     </h3>
 
                     <p>
-                        سيتم تنفيذ العملاء والحسابات المدينة وربطها بالمبيعات.
+                        سيتم بناء إدارة المخزون هنا.
                     </p>
 
                 </div>
@@ -725,21 +471,16 @@
         </section>
 
 
-        <!-- =========================
-             الموردون
-        ========================== -->
+        <!-- العملاء -->
 
-        <section
-            id="suppliers"
-            class="page-section"
-        >
+        <section id="customers"
+                 class="page-section">
 
             <div class="page-heading">
 
-                <div>
-                    <h2>الموردون</h2>
-                    <p>إدارة الموردين والأرصدة والمشتريات</p>
-                </div>
+                <h2>
+                    العملاء
+                </h2>
 
             </div>
 
@@ -748,17 +489,11 @@
 
                 <div class="empty-state large-empty">
 
-                    <div class="empty-icon">
-                        🚚
-                    </div>
+                    👥
 
                     <h3>
-                        وحدة الموردين
+                        إدارة العملاء
                     </h3>
-
-                    <p>
-                        سيتم تنفيذ الموردين والأرصدة وربطها بالمشتريات.
-                    </p>
 
                 </div>
 
@@ -767,21 +502,16 @@
         </section>
 
 
-        <!-- =========================
-             الحسابات
-        ========================== -->
+        <!-- الموردون -->
 
-        <section
-            id="accounts"
-            class="page-section"
-        >
+        <section id="suppliers"
+                 class="page-section">
 
             <div class="page-heading">
 
-                <div>
-                    <h2>الحسابات</h2>
-                    <p>الإدارة المالية والحسابات</p>
-                </div>
+                <h2>
+                    الموردون
+                </h2>
 
             </div>
 
@@ -790,17 +520,11 @@
 
                 <div class="empty-state large-empty">
 
-                    <div class="empty-icon">
-                        💰
-                    </div>
+                    🚚
 
                     <h3>
-                        وحدة الحسابات
+                        إدارة الموردين
                     </h3>
-
-                    <p>
-                        سيتم تنفيذ دليل الحسابات والقيود اليومية والأستاذ العام وميزان المراجعة.
-                    </p>
 
                 </div>
 
@@ -809,21 +533,16 @@
         </section>
 
 
-        <!-- =========================
-             التقارير
-        ========================== -->
+        <!-- الحسابات -->
 
-        <section
-            id="reports"
-            class="page-section"
-        >
+        <section id="accounts"
+                 class="page-section">
 
             <div class="page-heading">
 
-                <div>
-                    <h2>التقارير</h2>
-                    <p>التقارير المالية والتشغيلية</p>
-                </div>
+                <h2>
+                    الحسابات
+                </h2>
 
             </div>
 
@@ -832,18 +551,43 @@
 
                 <div class="empty-state large-empty">
 
-                    <div class="empty-icon">
-                        📊
-                    </div>
+                    💰
+
+                    <h3>
+                        النظام المحاسبي
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- التقارير -->
+
+        <section id="reports"
+                 class="page-section">
+
+            <div class="page-heading">
+
+                <h2>
+                    التقارير
+                </h2>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="empty-state large-empty">
+
+                    📊
 
                     <h3>
                         التقارير
                     </h3>
 
-                    <p>
-                        سيتم بناء التقارير بعد تنفيذ البيانات والعمليات الأساسية.
-                    </p>
-
                 </div>
 
             </div>
@@ -851,21 +595,16 @@
         </section>
 
 
-        <!-- =========================
-             الإعدادات
-        ========================== -->
+        <!-- الإعدادات -->
 
-        <section
-            id="settings"
-            class="page-section"
-        >
+        <section id="settings"
+                 class="page-section">
 
             <div class="page-heading">
 
-                <div>
-                    <h2>الإعدادات</h2>
-                    <p>إعدادات النظام والصيدلية</p>
-                </div>
+                <h2>
+                    الإعدادات
+                </h2>
 
             </div>
 
@@ -874,17 +613,11 @@
 
                 <div class="empty-state large-empty">
 
-                    <div class="empty-icon">
-                        ⚙️
-                    </div>
+                    ⚙️
 
                     <h3>
                         إعدادات النظام
                     </h3>
-
-                    <p>
-                        سيتم إضافة إعدادات المؤسسة والمستخدمين والعملات والترقيم.
-                    </p>
 
                 </div>
 
@@ -897,7 +630,142 @@
 </div>
 
 
-<script src="script.js"></script>
+<!-- JavaScript داخل نفس الملف -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const buttons =
+            document.querySelectorAll(
+                ".menu-item"
+            );
+
+        const sections =
+            document.querySelectorAll(
+                ".page-section"
+            );
+
+        const pageTitle =
+            document.getElementById(
+                "pageTitle"
+            );
+
+
+        const titles = {
+
+            dashboard:
+                "لوحة التحكم",
+
+            sales:
+                "المبيعات",
+
+            purchases:
+                "المشتريات",
+
+            products:
+                "الأصناف والأدوية",
+
+            inventory:
+                "المخزون",
+
+            customers:
+                "العملاء",
+
+            suppliers:
+                "الموردون",
+
+            accounts:
+                "الحسابات",
+
+            reports:
+                "التقارير",
+
+            settings:
+                "الإعدادات"
+
+        };
+
+
+        buttons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const sectionId =
+                            this.getAttribute(
+                                "data-section"
+                            );
+
+
+                        buttons.forEach(
+                            function (item) {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                        this.classList.add(
+                            "active"
+                        );
+
+
+                        sections.forEach(
+                            function (section) {
+
+                                section.classList.remove(
+                                    "active-section"
+                                );
+
+                            }
+                        );
+
+
+                        const selected =
+                            document.getElementById(
+                                sectionId
+                            );
+
+
+                        if (selected) {
+
+                            selected.classList.add(
+                                "active-section"
+                            );
+
+                        }
+
+
+                        if (
+                            pageTitle &&
+                            titles[sectionId]
+                        ) {
+
+                            pageTitle.textContent =
+                                titles[sectionId];
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
 
 </body>
+
 </html>
