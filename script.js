@@ -1,86 +1,104 @@
-/* =====================================================
+/* =========================================================
    شرف ERP
    نظام إدارة الصيدليات
-   إدارة الأصناف والأدوية
-===================================================== */
+   نسخة محلية تجريبية - LocalStorage
+========================================================= */
 
 
-/* =====================================================
-   البيانات
-===================================================== */
+/* =========================================================
+   DATABASE LOCAL
+========================================================= */
 
-let products = [];
+const DB_KEY = "sharaf_erp_db_v1";
+
+const defaultDB = {
+    products: [],
+    sales: [],
+    purchases: [],
+    customers: [],
+    suppliers: [],
+    settings: {
+        name: "صيدلية شرف",
+        phone: "",
+        address: "",
+        currency: "YER"
+    }
+};
+
+let db = loadDB();
+
+let saleLines = [];
+let purchaseLines = [];
 
 
-/* =====================================================
-   تحميل الأصناف المحفوظة
-===================================================== */
+/* =========================================================
+   BASIC
+========================================================= */
 
-function loadProducts() {
+function loadDB() {
 
     try {
 
-        const saved =
-            localStorage.getItem("sharaf_products");
+        const raw = localStorage.getItem(DB_KEY);
 
-        if (saved) {
-
-            products = JSON.parse(saved);
-
-        } else {
-
-            products = [];
-
+        if (!raw) {
+            return structuredClone(defaultDB);
         }
 
-        if (!Array.isArray(products)) {
+        const parsed = JSON.parse(raw);
 
-            products = [];
-
-        }
+        return {
+            ...structuredClone(defaultDB),
+            ...parsed,
+            settings: {
+                ...defaultDB.settings,
+                ...(parsed.settings || {})
+            }
+        };
 
     } catch (error) {
 
-        console.error(
-            "خطأ في تحميل الأصناف:",
-            error
-        );
+        console.error(error);
 
-        products = [];
-
+        return structuredClone(defaultDB);
     }
-
 }
 
 
-/* =====================================================
-   حفظ الأصناف
-===================================================== */
-
-function saveProducts() {
+function saveDB() {
 
     localStorage.setItem(
-        "sharaf_products",
-        JSON.stringify(products)
+        DB_KEY,
+        JSON.stringify(db)
     );
-
 }
 
 
-/* =====================================================
-   أدوات مساعدة
-===================================================== */
+function money(value) {
 
-function formatNumber(number) {
-
-    return Number(number || 0).toLocaleString(
+    return Number(value || 0).toLocaleString(
         "ar-YE",
         {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }
     );
+}
 
+
+function today() {
+
+    const d = new Date();
+
+    const y = d.getFullYear();
+
+    const m = String(d.getMonth() + 1)
+        .padStart(2, "0");
+
+    const day = String(d.getDate())
+        .padStart(2, "0");
+
+    return `${y}-${m}-${day}`;
 }
 
 
@@ -92,885 +110,361 @@ function escapeHTML(value) {
         .replaceAll(">", "&gt;")
         .replaceAll( " , "&quot;")
         .replaceAll(" ", "&#039;");
-
 }
 
 
-/* =====================================================
-   التنقل بين الشاشات
-===================================================== */
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
+
+
+function getNextNumber(prefix, list) {
+
+    return (
+        prefix +
+        "-" +
+        String(list.length + 1)
+            .padStart(5, "0")
+    );
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const pageInfo = {
+
+    dashboard: [
+        "لوحة التحكم",
+        "نظرة عامة على عمليات الصيدلية"
+    ],
+
+    sales: [
+        "المبيعات",
+        "إنشاء وإدارة فواتير البيع"
+    ],
+
+    purchases: [
+        "المشتريات",
+        "إنشاء وإدارة فواتير الشراء"
+    ],
+
+    products: [
+        "الأصناف والأدوية",
+        "إدارة قاعدة أصناف الصيدلية"
+    ],
+
+    inventory: [
+        "المخزون",
+        "الكميات والصلاحيات وحالة المخزون"
+    ],
+
+    customers: [
+        "العملاء",
+        "العملاء والأرصدة المدينة"
+    ],
+
+    suppliers: [
+        "الموردون",
+        "الموردون والأرصدة الدائنة"
+    ],
+
+    accounts: [
+        "الحسابات",
+        "ملخص الحركة المالية"
+    ],
+
+    reports: [
+        "التقارير",
+        "تقارير من البيانات المسجلة"
+    ],
+
+    settings: [
+        "الإعدادات",
+        "إعدادات الصيدلية والنظام"
+    ]
+
+};
+
+
+function navigate(page) {
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.page === page
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(".page")
+        .forEach(section => {
+
+            section.classList.toggle(
+                "active",
+                section.id === `page-${page}`
+            );
+
+        });
+
+
+    const info = pageInfo[page];
+
+    if (info) {
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent = info[0];
+
+        document.getElementById(
+            "pageSubtitle"
+        ).textContent = info[1];
+
+    }
+
+
+    refreshPage(page);
+}
+
 
 function setupNavigation() {
 
-    const menuItems =
-        document.querySelectorAll(
-            ".menu-item"
-        );
-
-    const sections =
-        document.querySelectorAll(
-            ".page-section"
-        );
-
-    const pageTitle =
-        document.getElementById(
-            "pageTitle"
-        );
-
-
-    const pageTitles = {
-
-        dashboard:
-            "لوحة التحكم",
-
-        sales:
-            "المبيعات",
-
-        purchases:
-            "المشتريات",
-
-        products:
-            "الأصناف والأدوية",
-
-        inventory:
-            "المخزون",
-
-        customers:
-            "العملاء",
-
-        suppliers:
-            "الموردون",
-
-        accounts:
-            "الحسابات",
-
-        reports:
-            "التقارير",
-
-        settings:
-            "الإعدادات"
-
-    };
-
-
-    menuItems.forEach(
-        function(button) {
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(button => {
 
             button.addEventListener(
                 "click",
-                function() {
-
-                    const sectionId =
-                        this.dataset.section;
-
-
-                    menuItems.forEach(
-                        function(item) {
-
-                            item.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    this.classList.add(
-                        "active"
-                    );
-
-
-                    sections.forEach(
-                        function(section) {
-
-                            section.classList.remove(
-                                "active-section"
-                            );
-
-                        }
-                    );
-
-
-                    const section =
-                        document.getElementById(
-                            sectionId
-                        );
-
-
-                    if (section) {
-
-                        section.classList.add(
-                            "active-section"
-                        );
-
-                    }
-
-
-                    if (
-                        pageTitle &&
-                        pageTitles[sectionId]
-                    ) {
-
-                        pageTitle.textContent =
-                            pageTitles[sectionId];
-
-                    }
-
-
-                    /* تحديث الشاشة */
-
-                    if (
-                        sectionId ===
-                        "products"
-                    ) {
-
-                        renderProducts();
-
-                    }
-
-
-                    if (
-                        sectionId ===
-                        "inventory"
-                    ) {
-
-                        renderInventory();
-
-                    }
-
-
-                    if (
-                        sectionId ===
-                        "dashboard"
-                    ) {
-
-                        updateDashboard();
-
-                    }
-
-                }
+                () => navigate(button.dataset.page)
             );
 
-        }
-    );
+        });
 
 }
 
 
-/* =====================================================
-   شاشة الأصناف
-===================================================== */
+/* =========================================================
+   REFRESH PAGE
+========================================================= */
+
+function refreshPage(page) {
+
+    switch (page) {
+
+        case "dashboard":
+            renderDashboard();
+            break;
+
+        case "sales":
+            prepareSaleScreen();
+            renderSalesHistory();
+            break;
+
+        case "purchases":
+            preparePurchaseScreen();
+            renderPurchasesHistory();
+            break;
+
+        case "products":
+            renderProducts();
+            break;
+
+        case "inventory":
+            renderInventory();
+            break;
+
+        case "customers":
+            renderCustomers();
+            break;
+
+        case "suppliers":
+            renderSuppliers();
+            break;
+
+        case "accounts":
+            renderAccounts();
+            break;
+
+        case "reports":
+            renderReportsDefault();
+            break;
+
+        case "settings":
+            loadSettingsForm();
+            break;
+    }
+}
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
 
 function setupProductForm() {
 
-    const openButton =
+    const open =
         document.getElementById(
-            "openProductForm"
+            "open-product-form"
         );
 
-    const formPanel =
+    const panel =
         document.getElementById(
-            "productFormPanel"
+            "product-form-panel"
         );
 
-    const cancelButton =
+    const cancel =
         document.getElementById(
-            "cancelProductForm"
+            "cancel-product"
         );
 
     const form =
         document.getElementById(
-            "productForm"
+            "product-form"
         );
 
 
-    /*
-       إذا كانت عناصر نموذج الأصناف
-       غير موجودة في index.html
-       لا نفعل شيئًا.
-    */
+    open.addEventListener("click", () => {
 
-    if (
-        !openButton ||
-        !formPanel ||
-        !cancelButton ||
-        !form
-    ) {
+        resetProductForm();
 
-        return;
+        panel.classList.remove("hidden");
 
-    }
+    });
 
 
-    /* فتح النموذج */
+    cancel.addEventListener("click", () => {
 
-    openButton.addEventListener(
-        "click",
-        function() {
+        panel.classList.add("hidden");
 
-            formPanel.classList.remove(
-                "hidden"
-            );
+    });
 
-            const nameInput =
-                document.getElementById(
-                    "productName"
-                );
-
-            if (nameInput) {
-
-                nameInput.focus();
-
-            }
-
-        }
-    );
-
-
-    /* إلغاء */
-
-    cancelButton.addEventListener(
-        "click",
-        function() {
-
-            form.reset();
-
-            formPanel.classList.add(
-                "hidden"
-            );
-
-        }
-    );
-
-
-    /* حفظ الصنف */
 
     form.addEventListener(
         "submit",
-        function(event) {
+        event => {
 
             event.preventDefault();
 
-
-            const name =
-                document.getElementById(
-                    "productName"
-                ).value.trim();
-
-
-            const barcode =
-                document.getElementById(
-                    "productBarcode"
-                ).value.trim();
-
-
-            const category =
-                document.getElementById(
-                    "productCategory"
-                ).value.trim();
-
-
-            const unit =
-                document.getElementById(
-                    "productUnit"
-                ).value;
-
-
-            const purchasePrice =
-                Number(
-                    document.getElementById(
-                        "purchasePrice"
-                    ).value
-                ) || 0;
-
-
-            const salePrice =
-                Number(
-                    document.getElementById(
-                        "salePrice"
-                    ).value
-                ) || 0;
-
-
-            const quantity =
-                Number(
-                    document.getElementById(
-                        "productQuantity"
-                    ).value
-                ) || 0;
-
-
-            const minimumStock =
-                Number(
-                    document.getElementById(
-                        "minimumStock"
-                    ).value
-                ) || 0;
-
-
-            /* التحقق */
-
-            if (!name) {
-
-                alert(
-                    "أدخل اسم الصنف."
-                );
-
-                return;
-
-            }
-
-
-            /* منع تكرار الباركود */
-
-            if (barcode) {
-
-                const duplicate =
-                    products.some(
-                        function(product) {
-
-                            return (
-                                product.barcode ===
-                                barcode
-                            );
-
-                        }
-                    );
-
-
-                if (duplicate) {
-
-                    alert(
-                        "هذا الباركود موجود بالفعل."
-                    );
-
-                    return;
-
-                }
-
-            }
-
-
-            /* إنشاء الصنف */
-
-            const product = {
-
-                id:
-                    Date.now(),
-
-                name:
-                    name,
-
-                barcode:
-                    barcode,
-
-                category:
-                    category,
-
-                unit:
-                    unit,
-
-                purchasePrice:
-                    purchasePrice,
-
-                salePrice:
-                    salePrice,
-
-                quantity:
-                    quantity,
-
-                minimumStock:
-                    minimumStock,
-
-                createdAt:
-                    new Date().toISOString()
-
-            };
-
-
-            products.push(
-                product
-            );
-
-
-            saveProducts();
-
-
-            form.reset();
-
-
-            formPanel.classList.add(
-                "hidden"
-            );
-
-
-            renderProducts();
-
-            renderInventory();
-
-            updateDashboard();
-
-
-            alert(
-                "تم حفظ الصنف بنجاح."
-            );
+            saveProduct();
 
         }
     );
 
-}
 
-
-/* =====================================================
-   عرض الأصناف
-===================================================== */
-
-function renderProducts(
-    search = ""
-) {
-
-    const table =
-        document.getElementById(
-            "productsTableBody"
+    document
+        .getElementById("product-search")
+        .addEventListener(
+            "input",
+            renderProducts
         );
 
 
-    if (!table) {
-
-        return;
-
-    }
-
-
-    const keyword =
-        search
-            .trim()
-            .toLowerCase();
-
-
-    const filtered =
-        products.filter(
-            function(product) {
-
-                const name =
-                    String(
-                        product.name || ""
-                    ).toLowerCase();
-
-
-                const barcode =
-                    String(
-                        product.barcode || ""
-                    ).toLowerCase();
-
-
-                return (
-                    name.includes(keyword) ||
-                    barcode.includes(keyword)
-                );
-
-            }
+    document
+        .getElementById("products-table")
+        .addEventListener(
+            "click",
+            handleProductTableClick
         );
-
-
-    if (filtered.length === 0) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="7"
-                    class="empty-table"
-                >
-                    لا توجد أصناف مسجلة
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    table.innerHTML =
-        filtered
-            .map(
-                function(product, index) {
-
-                    let status =
-                        "متوفر";
-
-                    let statusClass =
-                        "status-good";
-
-
-                    if (
-                        Number(
-                            product.quantity
-                        ) <= 0
-                    ) {
-
-                        status =
-                            "نفد المخزون";
-
-                        statusClass =
-                            "status-empty";
-
-                    }
-
-                    else if (
-                        Number(
-                            product.quantity
-                        ) <=
-                        Number(
-                            product.minimumStock
-                        )
-                    ) {
-
-                        status =
-                            "منخفض";
-
-                        statusClass =
-                            "status-low";
-
-                    }
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                ${index + 1}
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.barcode || "-"
-                                )}
-                            </td>
-
-                            <td>
-                                <strong>
-                                    ${escapeHTML(
-                                        product.name
-                                    )}
-                                </strong>
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.category || "-"
-                                )}
-                            </td>
-
-                            <td>
-                                ${Number(
-                                    product.quantity
-                                )}
-                                ${escapeHTML(
-                                    product.unit || ""
-                                )}
-                            </td>
-
-                            <td>
-                                ${formatNumber(
-                                    product.salePrice
-                                )}
-                            </td>
-
-                            <td>
-
-                                <span
-                                    class="
-                                        status
-                                        ${statusClass}
-                                    "
-                                >
-                                    ${status}
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
 
 }
 
 
-/* =====================================================
-   البحث عن صنف
-===================================================== */
+function resetProductForm() {
 
-function setupProductSearch() {
+    document
+        .getElementById("product-form")
+        .reset();
 
-    const searchInput =
-        document.getElementById(
-            "productSearch"
-        );
+    document
+        .getElementById("product-id")
+        .value = "";
 
+    document
+        .getElementById("product-quantity")
+        .value = "0";
 
-    if (!searchInput) {
+    document
+        .getElementById("product-minimum")
+        .value = "5";
 
-        return;
-
-    }
-
-
-    searchInput.addEventListener(
-        "input",
-        function() {
-
-            renderProducts(
-                this.value
-            );
-
-        }
-    );
+    document
+        .getElementById("product-form-panel")
+        .classList.remove("hidden");
 
 }
 
 
-/* =====================================================
-   المخزون
-===================================================== */
+function saveProduct() {
 
-function renderInventory() {
-
-    const table =
+    const id =
         document.getElementById(
-            "inventoryTableBody"
-        );
+            "product-id"
+        ).value;
 
 
-    if (!table) {
-
-        return;
-
-    }
-
-
-    if (products.length === 0) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="6"
-                    class="empty-table"
-                >
-                    لا توجد أصناف في المخزون
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    table.innerHTML =
-        products
-            .map(
-                function(product) {
-
-                    let status =
-                        "متوفر";
-
-                    let statusClass =
-                        "status-good";
-
-
-                    if (
-                        Number(
-                            product.quantity
-                        ) <= 0
-                    ) {
-
-                        status =
-                            "نفد المخزون";
-
-                        statusClass =
-                            "status-empty";
-
-                    }
-
-                    else if (
-                        Number(
-                            product.quantity
-                        ) <=
-                        Number(
-                            product.minimumStock
-                        )
-                    ) {
-
-                        status =
-                            "منخفض";
-
-                        statusClass =
-                            "status-low";
-
-                    }
-
-
-                    const value =
-                        Number(
-                            product.quantity
-                        ) *
-                        Number(
-                            product.purchasePrice
-                        );
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-                                <strong>
-                                    ${escapeHTML(
-                                        product.name
-                                    )}
-                                </strong>
-                            </td>
-
-                            <td>
-                                ${escapeHTML(
-                                    product.barcode || "-"
-                                )}
-                            </td>
-
-                            <td>
-                                ${Number(
-                                    product.quantity
-                                )}
-                            </td>
-
-                            <td>
-                                ${Number(
-                                    product.minimumStock
-                                )}
-                            </td>
-
-                            <td>
-
-                                <span
-                                    class="
-                                        status
-                                        ${statusClass}
-                                    "
-                                >
-                                    ${status}
-                                </span>
-
-                            </td>
-
-                            <td>
-                                ${formatNumber(
-                                    value
-                                )}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-}
-
-
-/* =====================================================
-   لوحة التحكم
-===================================================== */
-
-function updateDashboard() {
-
-    const productCount =
+    const name =
         document.getElementById(
-            "productCount"
-        );
+            "product-name"
+        ).value.trim();
 
 
-    const lowStockCount =
+    const generic =
         document.getElementById(
-            "lowStockCount"
-        );
+            "product-generic"
+        ).value.trim();
 
 
-    if (productCount) {
-
-        productCount.textContent =
-            products.length;
-
-    }
+    const barcode =
+        document.getElementById(
+            "product-barcode"
+        ).value.trim();
 
 
-    const lowStock =
-        products.filter(
-            function(product) {
-
-                return (
-                    Number(
-                        product.quantity
-                    ) <=
-                    Number(
-                        product.minimumStock
-                    )
-                );
-
-            }
-        ).length;
+    const category =
+        document.getElementById(
+            "product-category"
+        ).value.trim();
 
 
-    if (lowStockCount) {
-
-        lowStockCount.textContent =
-            lowStock;
-
-    }
-
-}
+    const unit =
+        document.getElementById(
+            "product-unit"
+        ).value;
 
 
-/* =====================================================
-   تشغيل النظام
-===================================================== */
+    const purchasePrice =
+        Number(
+            document.getElementById(
+                "product-purchase-price"
+            ).value
+        ) || 0;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
 
-        loadProducts();
+    const salePrice =
+        Number(
+            document.getElementById(
+                "product-sale-price"
+            ).value
+        ) || 0;
 
-        setupNavigation();
 
-        setupProductForm();
-
-        setupProductSearch();
-
-        renderProducts();
-
-        renderInventory();
-
-        updateDashboard();
-
-        console.log(
-            "شرف ERP جاهز للعمل"
-        );
-
-    }
-);
+    const quantity =
+        Number(
+            document.getElementById(
+               
