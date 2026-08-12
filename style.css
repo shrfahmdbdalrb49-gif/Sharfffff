@@ -1,15 +1,222 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #222;
+    font-family: Arial, Tahoma, sans-serif;
+    background: #f5f7fa;
+    color: #1f2937;
 }
 
-h1 {
-    color: #1a237e;
+button {
+    font-family: inherit;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================
+   القائمة الجانبية
+========================= */
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: #172554;
+    color: white;
+    padding: 20px 14px;
+}
+
+.logo {
+    padding: 10px 12px 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: 18px;
+}
+
+.logo h2 {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.logo span {
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.menu-item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #e2e8f0;
+    text-align: right;
+    padding: 13px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.menu-item.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* =========================
+   المحتوى الرئيسي
+========================= */
+
+.main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* =========================
+   الشريط العلوي
+========================= */
+
+.topbar {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 22px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topbar h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.topbar p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.user-area {
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* =========================
+   لوحة التحكم
+========================= */
+
+.dashboard {
+    padding: 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+/* =========================
+   البطاقات الإحصائية
+========================= */
+
+.stat-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.stat-card span {
+    display: block;
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.stat-card small {
+    color: #94a3b8;
+}
+
+/* =========================
+   اللوحات
+========================= */
+
+.panel {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    min-height: 280px;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-header h2 {
+    font-size: 17px;
+}
+
+.empty-state {
+    padding: 50px 20px;
     text-align: center;
+    color: #94a3b8;
+}
+
+/* =========================
+   استجابة الشاشات
+========================= */
+
+@media (max-width: 1000px) {
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .app {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+
+    .topbar {
+        padding: 18px;
+    }
+
 }
